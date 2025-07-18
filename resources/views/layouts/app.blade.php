@@ -31,161 +31,399 @@
             background-color: var(--kai-gray-light);
         }
 
-        /* Navbar Styles */
-        .navbar {
-            background: linear-gradient(135deg, var(--kai-blue) 0%, var(--kai-dark-blue) 100%) !important;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
-            padding: 15px 0;
-            border-bottom: 3px solid var(--kai-orange);
+        /* Top left hamburger menu */
+        .sidebar-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1040;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            color: var(--kai-blue);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
         }
 
-        .navbar-brand {
-            color: var(--kai-white) !important;
+        /* Top right logo */
+        .logo {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1040;
+            color: var(--kai-blue);
             font-weight: 700;
-            font-size: 1.3rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 2rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            color: var(--kai-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo::before {
+            content: '🚂';
+            font-size: 2rem;
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--kai-orange);
+            color: var(--kai-white);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.3);
+        }
+
+        /* Hamburger lines */
+        .hamburger-line {
+            width: 24px;
+            height: 2px;
+            background: currentColor;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-toggle:hover .hamburger-line {
+            background: var(--kai-white);
+        }
+
+        .sidebar-toggle.active .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .sidebar-toggle.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .sidebar-toggle.active .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background: linear-gradient(180deg, var(--kai-blue) 0%, var(--kai-dark-blue) 100%);
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.15);
+            transition: left 0.3s ease;
+            z-index: 1050;
+            overflow-y: auto;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: rgba(255, 107, 53, 0.1);
+            border-bottom: 2px solid var(--kai-orange);
+        }
+
+        .sidebar-header h4 {
+            color: var(--kai-white);
+            font-weight: 600;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--kai-white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-close:hover {
+            background: rgba(255, 107, 53, 0.2);
+            color: var(--kai-orange);
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .sidebar-menu-item {
+            display: block;
+            padding: 15px 25px;
+            color: var(--kai-white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-menu-item:hover {
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--kai-orange);
+            border-left-color: var(--kai-orange);
             text-decoration: none;
         }
 
-        .navbar-brand:hover {
-            color: var(--kai-orange) !important;
+        .sidebar-menu-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
         }
 
-        .navbar-brand::before {
-            content: '🚂';
-            font-size: 1.5rem;
-            margin-right: 5px;
+        .sidebar-section {
+            padding: 10px 25px;
+            color: var(--kai-orange);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 107, 53, 0.3);
+            margin-bottom: 10px;
         }
 
-        .navbar-toggler {
-            border: 2px solid var(--kai-orange);
-            padding: 8px 12px;
+        .sidebar-profile {
+            padding: 20px 25px;
+            border-top: 1px solid rgba(255, 107, 53, 0.3);
+            margin-top: 20px;
+        }
+
+        .sidebar-profile .profile-info {
+            color: var(--kai-white);
+            margin-bottom: 15px;
+        }
+
+        .sidebar-profile .profile-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-profile .profile-role {
+            font-size: 0.9rem;
+            color: var(--kai-gray-medium);
+        }
+
+        .sidebar-profile .logout-btn {
+            background: var(--kai-orange);
+            color: var(--kai-white);
+            border: none;
+            padding: 10px 20px;
             border-radius: 8px;
-        }
-
-        .navbar-toggler:focus {
-            box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.25);
-        }
-
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23FF6B35' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-            width: 1.5em;
-            height: 1.5em;
-        }
-
-        .navbar-nav .nav-link {
-            color: var(--kai-white) !important;
             font-weight: 500;
-            font-size: 1rem;
-            padding: 10px 20px !important;
-            border-radius: 8px;
+            cursor: pointer;
             transition: all 0.3s ease;
-            margin: 0 5px;
+            width: 100%;
         }
 
-        .navbar-nav .nav-link:hover {
-            background: rgba(255, 107, 53, 0.2);
-            color: var(--kai-orange) !important;
+        .sidebar-profile .logout-btn:hover {
+            background: #e55a2b;
             transform: translateY(-2px);
         }
 
-        .dropdown-menu {
-            background: var(--kai-white);
-            border: 2px solid var(--kai-orange);
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            margin-top: 10px;
-        }
-
-        .dropdown-item {
-            color: var(--kai-blue);
-            font-weight: 500;
-            padding: 12px 20px;
+        /* Sidebar Overlay */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1045;
+            opacity: 0;
+            visibility: hidden;
             transition: all 0.3s ease;
         }
 
-        .dropdown-item:hover {
-            background: var(--kai-orange);
-            color: var(--kai-white);
-        }
-
-        .dropdown-toggle::after {
-            color: var(--kai-orange);
-            font-size: 0.8rem;
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
 
         /* Main content adjustment */
         main {
-            padding-top: 0 !important;
+            padding-top: 20px !important;
+            transition: margin-left 0.3s ease;
         }
 
         /* Responsive adjustments */
         @media (max-width: 768px) {
-            .navbar-brand {
-                font-size: 1.1rem;
+            .logo {
+                font-size: 1.5rem;
+                padding: 8px;
             }
             
-            .navbar-nav .nav-link {
-                margin: 5px 0;
+            .logo::before {
+                font-size: 1.5rem;
+            }
+            
+            .sidebar {
+                width: 280px;
+            }
+
+            .sidebar-toggle {
+                top: 15px;
+                left: 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo {
+                top: 15px;
+                right: 15px;
+                font-size: 1.3rem;
+                padding: 6px;
+            }
+
+            .logo::before {
+                font-size: 1.3rem;
+            }
+
+            .sidebar-toggle {
+                top: 15px;
+                left: 15px;
+                width: 45px;
+                height: 45px;
+                padding: 10px;
+            }
+
+            .hamburger-line {
+                width: 20px;
             }
         }
     </style>
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    Master Data Grafik Perjalanan Kereta
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side -->
-                    <ul class="navbar-nav me-auto"></ul>
-                    <!-- Right Side -->
-                    <ul class="navbar-nav ms-auto">
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <!-- Dropdown User -->
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                   data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ Auth::user()->name ?? 'User' }}
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        Logout
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <a class="logo" href="https://www.kai.id/" target="_blank"></a>
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h4>Menu Navigation</h4>
+                <button class="sidebar-close" id="sidebarClose">×</button>
             </div>
-        </nav>
+            
+            @auth
+                <div class="sidebar-menu">
+                    <div class="sidebar-section">Admin Management</div>
+                    <a href="{{ url('/users') }}" class="sidebar-menu-item">
+                        <i>👥</i> Manajemen Users
+                    </a>
+                    <a href="{{ url('/roles') }}" class="sidebar-menu-item">
+                        <i>🔐</i> Manajemen Roles
+                    </a>
+                    <a href="{{ url('/menus') }}" class="sidebar-menu-item">
+                        <i>📋</i> Manajemen Menus
+                    </a>
+                </div>
+
+                <div class="sidebar-profile">
+                    <div class="profile-info">
+                        <div class="profile-name">{{ Auth::user()->name ?? 'User' }}</div>
+                        <div class="profile-role">Administrator</div>
+                    </div>
+                    <button class="logout-btn" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        Logout
+                    </button>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                </div>
+            @else
+                <div class="sidebar-menu">
+                    <div class="sidebar-section">Authentication</div>
+                    @if (Route::has('login'))
+                        <a href="{{ route('login') }}" class="sidebar-menu-item">
+                            <i>🔑</i> Login
+                        </a>
+                    @endif
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="sidebar-menu-item">
+                            <i>📝</i> Register
+                        </a>
+                    @endif
+                </div>
+            @endauth
+        </div>
+
         <main class="py-4">
             @yield('content')
         </main>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebarClose = document.getElementById('sidebarClose');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+            function openSidebar() {
+                sidebar.classList.add('active');
+                sidebarOverlay.classList.add('active');
+                sidebarToggle.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+                sidebarToggle.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            sidebarToggle.addEventListener('click', openSidebar);
+            sidebarClose.addEventListener('click', closeSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
+
+            // Close sidebar when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!sidebar.contains(event.target) && !sidebarToggle.contains(event.target) && sidebar.classList.contains('active')) {
+                    closeSidebar();
+                }
+            });
+
+            // Close sidebar on escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && sidebar.classList.contains('active')) {
+                    closeSidebar();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

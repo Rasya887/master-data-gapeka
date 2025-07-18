@@ -7,7 +7,9 @@ use App\Http\Controllers\StasiunController;
 use App\Http\Controllers\JarakController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ImportController;
-
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\MenuController;
 
 
 /*
@@ -50,3 +52,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+Route::middleware(['role:Admin|Editor'])->group(function () {
+        Route::resource('users', UserController::class);
+        Route::resource('roles', RoleController::class);
+        Route::resource('menus', MenuController::class);
+    });
+
