@@ -248,15 +248,16 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 
-                                {{-- {!! NoCaptcha::display() !!} --}}
-                <div class="form-group">
-                    {!! NoCaptcha::display() !!}
+                                {}{-- {!! NoCaptcha::display() !!} --}}
+                                <div class="mb-3">
+                    <div class="g-recaptcha" data-sitekey="6LcaepErAAAAAGgXSKy9T6g_85GN9rnzGxvoxfDe"></div>
                     @if ($errors->has('g-recaptcha-response'))
-                        <span class="invalid-feedback d-block" role="alert">
-                            <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
-                        </span>
+                        <small class="text-danger">
+                            {{ $errors->first('g-recaptcha-response') }}
+                        </small>
                     @endif
                 </div>
+
 
                 <div class="form-group">
                     <label for="email" class="form-label">{{ __('Email Address') }}</label>
