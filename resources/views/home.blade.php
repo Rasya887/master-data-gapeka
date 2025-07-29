@@ -1,327 +1,456 @@
-@extends('layouts.app')
-
-@section('content')
-<style>
-    :root {
-        --kai-orange: #FF6B35;
-        --kai-blue: #1E3A8A;
-        --kai-light-blue: #3B82F6;
-        --kai-dark-blue: #1E40AF;
-        --kai-white: #FFFFFF;
-        --kai-gray-light: #F8FAFC;
-        --kai-gray-medium: #E2E8F0;
-        --kai-shadow: rgba(0, 0, 0, 0.1);
-    }
-
-    body {
-        background: linear-gradient(135deg, var(--kai-blue) 0%, var(--kai-light-blue) 50%, var(--kai-orange) 100%);
-        min-height: 100vh;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .dashboard-container {
-        min-height: 80vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 40px 20px;
-    }
-
-    .dashboard-card {
-        background: var(--kai-white);
-        border-radius: 25px;
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-        overflow: hidden;
-        max-width: 1000px;
-        width: 100%;
-        position: relative;
-        backdrop-filter: blur(10px);
-    }
-
-    .dashboard-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 6px;
-        background: linear-gradient(90deg, var(--kai-orange) 0%, var(--kai-blue) 25%, var(--kai-orange) 50%, var(--kai-blue) 75%, var(--kai-orange) 100%);
-    }
-
-    .dashboard-header {
-        background: linear-gradient(135deg, var(--kai-blue) 0%, var(--kai-dark-blue) 100%);
-        color: var(--kai-white);
-        text-align: center;
-        padding: 50px 30px;
-        position: relative;
-    }
-
-    .dashboard-header::after {
-        content: '';
-        position: absolute;
-        bottom: -15px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 0;
-        height: 0;
-        border-left: 20px solid transparent;
-        border-right: 20px solid transparent;
-        border-top: 15px solid var(--kai-dark-blue);
-    }
-
-    .logo-section {
-        margin-bottom: 30px;
-    }
-
-    .logo-icon {
-        width: 80px;
-        height: 80px;
-        background: linear-gradient(135deg, var(--kai-orange) 0%, var(--kai-white) 100%);
-        border-radius: 50%;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2rem;
-        margin-bottom: 15px;
-        box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
-    }
-
-    .dashboard-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        margin-bottom: 15px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    .dashboard-subtitle {
-        font-size: 1.2rem;
-        font-weight: 400;
-        opacity: 0.9;
-        margin-bottom: 0;
-    }
-
-    .decorative-line {
-        width: 100px;
-        height: 4px;
-        background: linear-gradient(90deg, var(--kai-orange) 0%, var(--kai-white) 100%);
-        margin: 20px auto;
-        border-radius: 2px;
-    }
-
-    .dashboard-body {
-        padding: 60px 40px 50px;
-    }
-
-    .menu-section {
-        margin-bottom: 40px;
-    }
-
-    .menu-title {
-        color: var(--kai-blue);
-        font-size: 1.3rem;
-        font-weight: 600;
-        text-align: center;
-        margin-bottom: 40px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .menu-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 30px;
-        max-width: 900px;
-        margin: 0 auto;
-    }
-
-    .menu-card {
-        background: var(--kai-white);
-        border: 3px solid var(--kai-gray-medium);
-        border-radius: 20px;
-        padding: 35px 25px;
-        text-align: center;
-        transition: all 0.4s ease;
-        position: relative;
-        overflow: hidden;
-        text-decoration: none;
-        display: block;
-    }
-
-    .menu-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.1), transparent);
-        transition: left 0.6s ease;
-    }
-
-    .menu-card:hover::before {
-        left: 100%;
-    }
-
-    .menu-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        border-color: var(--kai-orange);
-        text-decoration: none;
-    }
-
-    .menu-card.daop {
-        border-color: var(--kai-blue);
-    }
-
-    .menu-card.daop:hover {
-        background: linear-gradient(135deg, var(--kai-blue) 0%, var(--kai-dark-blue) 100%);
-        color: var(--kai-white);
-        border-color: var(--kai-blue);
-    }
-
-    .menu-card.stasiun {
-        border-color: var(--kai-orange);
-    }
-
-    .menu-card.stasiun:hover {
-        background: linear-gradient(135deg, var(--kai-orange) 0%, #FF8A65 100%);
-        color: var(--kai-white);
-        border-color: var(--kai-orange);
-    }
-
-    .menu-card.jarak {
-        border-color: var(--kai-light-blue);
-    }
-
-    .menu-card.jarak:hover {
-        background: linear-gradient(135deg, var(--kai-light-blue) 0%, var(--kai-blue) 100%);
-        color: var(--kai-white);
-        border-color: var(--kai-light-blue);
-    }
-
-    .menu-icon {
-        font-size: 3rem;
-        margin-bottom: 20px;
-        display: block;
-    }
-
-    .menu-title-card {
-        font-size: 1.3rem;
-        font-weight: 600;
-        margin-bottom: 10px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .menu-description {
-        font-size: 0.95rem;
-        opacity: 0.8;
-        line-height: 1.5;
-    }
-
-    .floating-elements {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        overflow: hidden;
-    }
-
-    .floating-train {
-        position: absolute;
-        font-size: 2rem;
-        opacity: 0.1;
-        animation: float 6s ease-in-out infinite;
-    }
-
-    .floating-train:nth-child(1) {
-        top: 10%;
-        left: 10%;
-        animation-delay: 0s;
-    }
-
-    .floating-train:nth-child(2) {
-        top: 70%;
-        right: 10%;
-        animation-delay: 2s;
-    }
-
-    .floating-train:nth-child(3) {
-        bottom: 20%;
-        left: 80%;
-        animation-delay: 4s;
-    }
-
-    @keyframes float {
-        0%, 100% {
-            transform: translateY(0px);
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ config('app.name', 'Laravel') }}</title>
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Bundle JS (include Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+    
+    <style>
+        :root {
+            --kai-orange: #FF6B35;
+            --kai-blue: #1E3A8A;
+            --kai-light-blue: #3B82F6;
+            --kai-dark-blue: #1E40AF;
+            --kai-white: #FFFFFF;
+            --kai-gray-light: #F8FAFC;
+            --kai-gray-medium: #E2E8F0;
+            --kai-shadow: rgba(0, 0, 0, 0.1);
         }
-        50% {
-            transform: translateY(-20px);
-        }
-    }
 
-    @media (max-width: 768px) {
-        .dashboard-title {
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: url('/images/fotokai5.jpg') no-repeat center center fixed;
+            background-size: cover;
+            background-attachment: fixed; /* penting */
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Top left hamburger menu */
+        .sidebar-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1040;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            color: var(--kai-blue);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Top right logo */
+        .logo {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1040;
+            color: var(--kai-blue);
+            font-weight: 700;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            color: var(--kai-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo::before {
+            content: '🚂';
             font-size: 2rem;
         }
-        
-        .dashboard-body {
-            padding: 40px 20px;
-        }
-        
-        .menu-grid {
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-        
-        .menu-card {
-            padding: 30px 20px;
-        }
-    }
-</style>
 
-<div class="dashboard-container">
-    <div class="dashboard-card">
-        <div class="floating-elements">
-            <div class="floating-train">🚂</div>
-            <div class="floating-train">🚃</div>
-            <div class="floating-train">🚄</div>
-        </div>
-        
-        <div class="dashboard-header">
-            <div class="logo-section">
-                <div class="logo-icon">🚂</div>
-                <div class="decorative-line"></div>
+        .sidebar-toggle:hover {
+            background: var(--kai-orange);
+            color: var(--kai-white);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.3);
+        }
+
+        /* Hamburger lines */
+        .hamburger-line {
+            width: 24px;
+            height: 2px;
+            background: currentColor;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-toggle:hover .hamburger-line {
+            background: var(--kai-white);
+        }
+
+        .sidebar-toggle.active .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .sidebar-toggle.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .sidebar-toggle.active .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 320px;
+            height: 100vh;
+            background: linear-gradient(180deg, var(--kai-blue) 0%, var(--kai-dark-blue) 100%);
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.15);
+            transition: left 0.3s ease;
+            z-index: 1050;
+            overflow-y: auto;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: rgba(255, 107, 53, 0.1);
+            border-bottom: 2px solid var(--kai-orange);
+        }
+
+        .sidebar-header h4 {
+            color: var(--kai-white);
+            font-weight: 600;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--kai-white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-close:hover {
+            background: rgba(255, 107, 53, 0.2);
+            color: var(--kai-orange);
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .sidebar-menu-item {
+            display: block;
+            padding: 15px 25px;
+            color: var(--kai-white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-menu-item:hover {
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--kai-orange);
+            border-left-color: var(--kai-orange);
+            text-decoration: none;
+        }
+
+        .sidebar-menu-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-section {
+            padding: 10px 25px;
+            color: var(--kai-orange);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 107, 53, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .sidebar-profile {
+            padding: 20px 25px;
+            border-top: 1px solid rgba(255, 107, 53, 0.3);
+            margin-top: 20px;
+        }
+
+        .sidebar-profile .profile-info {
+            color: var(--kai-white);
+            margin-bottom: 15px;
+        }
+
+        .sidebar-profile .profile-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-profile .profile-role {
+            font-size: 0.9rem;
+            color: var(--kai-gray-medium);
+        }
+
+        .sidebar-profile .logout-btn {
+            background: var(--kai-orange);
+            color: var(--kai-white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .sidebar-profile .logout-btn:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        /* Sidebar Overlay */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1045;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Main content adjustment */
+        main {
+            padding-top: 20px !important;
+            transition: margin-left 0.3s ease;
+            min-height: 100vh;
+            margin: 80px 0px 0px 0px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 1.5rem;
+                padding: 8px;
+            }
+            
+            .logo::before {
+                font-size: 1.5rem;
+            }
+            
+            .sidebar {
+                width: 300px;
+            }
+
+            .sidebar-toggle {
+                top: 15px;
+                left: 15px;
+            }
+
+            main {
+                margin: 80px 0px 0px 0px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo {
+                top: 15px;
+                right: 15px;
+                font-size: 1.3rem;
+                padding: 6px;
+            }
+
+            .logo::before {
+                font-size: 1.3rem;
+            }
+
+            .sidebar-toggle {
+                top: 15px;
+                left: 15px;
+                width: 45px;
+                height: 45px;
+                padding: 10px;
+            }
+
+            .hamburger-line {
+                width: 20px;
+            }
+
+            main {
+                margin: 70px 5px 5px 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <a class="logo" href="https://www.kai.id/" target="_blank"></a>
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h4>Menu Navigation</h4>
+                <button class="sidebar-close" id="sidebarClose">×</button>
             </div>
-            <h1 class="dashboard-title">Master GAPEKA</h1>
-            <p class="dashboard-subtitle">Sistem Manajemen Grafik Perjalanan Kereta Api</p>
-        </div>
-        
-        <div class="dashboard-body">
-            <div class="menu-section">
-                <h3 class="menu-title">Pilih Menu Data</h3>
-                
-                <div class="menu-grid">
-                    <a href="{{ route('daop.index') }}" class="menu-card daop">
-                        <span class="menu-icon">🏢</span>
-                        <h4 class="menu-title-card">Data Daop</h4>
+            
+            @auth
+                <div class="sidebar-menu">
+                    <div class="sidebar-section">Admin Management</div>
+                    <a href="{{ url('/users') }}" class="sidebar-menu-item">
+                        <i>👥</i> Manajemen Users
+                    </a>
+                    <a href="{{ url('/roles') }}" class="sidebar-menu-item">
+                        <i>🔐</i> Manajemen Roles
+                    </a>
+                    <a href="{{ url('/menus') }}" class="sidebar-menu-item">
+                        <i>📋</i> Manajemen Menus
                     </a>
                     
-                    <a href="{{ route('stasiun.index') }}" class="menu-card stasiun">
-                        <span class="menu-icon">🚉</span>
-                        <h4 class="menu-title-card">Data Stasiun</h4>
+                    <div class="sidebar-section">Master Data</div>
+                    <a href="{{ route('daop.index') }}" class="sidebar-menu-item">
+                        <i>🚄</i> Master Daop
                     </a>
-                    
-                    <a href="{{ route('jarak.index') }}" class="menu-card jarak">
-                        <span class="menu-icon">📏</span>
-                        <h4 class="menu-title-card">Data Jarak</h4>
+                    <a href="{{ route('stasiun.index') }}" class="sidebar-menu-item">
+                        <i>🏢</i> Master Stasiun
+                    </a>
+                    <a href="{{ route('jarak.index') }}" class="sidebar-menu-item">
+                        <i>📏</i> Master Jarak
                     </a>
                 </div>
-            </div>
+
+                <div class="sidebar-profile">
+                    <div class="profile-info">
+                        <div class="profile-name">{{ Auth::user()->name ?? 'User' }}</div>
+                        <div class="profile-role">Administrator</div>
+                    </div>
+                    <button class="logout-btn" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        Logout
+                    </button>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                </div>
+            @else
+                <div class="sidebar-menu">
+                    <div class="sidebar-section">Authentication</div>
+                    @if (Route::has('login'))
+                        <a href="{{ route('login') }}" class="sidebar-menu-item">
+                            <i>🔑</i> Login
+                        </a>
+                    @endif
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="sidebar-menu-item">
+                            <i>📝</i> Register
+                        </a>
+                    @endif
+                </div>
+            @endauth
         </div>
+
+        <main class="py-4">
+            @yield('content')
+        </main>
     </div>
-</div>
-@endsection
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebarClose = document.getElementById('sidebarClose');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+            function openSidebar() {
+                sidebar.classList.add('active');
+                sidebarOverlay.classList.add('active');
+                sidebarToggle.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+                sidebarToggle.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            sidebarToggle.addEventListener('click', openSidebar);
+            sidebarClose.addEventListener('click', closeSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
+
+            // Close sidebar when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!sidebar.contains(event.target) && !sidebarToggle.contains(event.target) && sidebar.classList.contains('active')) {
+                    closeSidebar();
+                }
+            });
+
+            // Close sidebar on escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && sidebar.classList.contains('active')) {
+                    closeSidebar();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

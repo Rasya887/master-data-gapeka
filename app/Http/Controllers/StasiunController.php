@@ -6,14 +6,49 @@ use App\Models\Stasiun;
 use App\Models\Daop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class StasiunController extends Controller
 {
-    public function index()
-    {
-        $stasiuns = Stasiun::with('daop')->paginate(10);
-        return view('stasiun.index', compact('stasiuns'));
+    
+public function index(Request $request)
+{
+    // Awal query: JOIN ke daops
+    $query = Stasiun::join('daops', 'stasiuns.id_daop', '=', 'daops.id')
+        ->select('stasiuns.*') // Hindari duplikasi kolom dari join
+        ->with('daop');
+
+    // Filter by ID Daop (dropdown)
+    if ($request->filled('daop')) {
+        $query->where('stasiuns.id_daop', $request->daop);
     }
+
+    // Filter status aktif
+    if ($request->filled('aktif')) {
+        $query->where('stasiuns.aktif', $request->aktif);
+    }
+
+    // Keyword search: cari di nama, singkatan, dan nama daop
+    if ($request->filled('search')) {
+        $keyword = $request->search;
+        $query->where(function ($q) use ($keyword) {
+            $q->where('stasiuns.nama', 'like', "%$keyword%")
+              ->orWhere('stasiuns.singkatan', 'like', "%$keyword%")
+              ->orWhere('daops.nama', 'like', "%$keyword%");
+        });
+    }
+
+    // Pagination dengan query string tetap terbawa
+    $stasiuns = $query->orderBy('stasiuns.nama')->paginate(10)->appends($request->all());
+
+    // Daftar daop buat dropdown filter
+    $daops = Daop::all();
+
+    return view('stasiun.index', compact('stasiuns', 'daops'));
+}
+
+
 
     public function create()
     {

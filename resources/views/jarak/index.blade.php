@@ -224,14 +224,16 @@
 
     .search-container {
         display: flex;
-        gap: 20px;
+        gap: 15px;
         align-items: center;
         flex-wrap: wrap;
+        justify-content: flex-start;
     }
 
     .search-box {
         flex: 1;
-        min-width: 300px;
+        min-width: 280px;
+        max-width: 400px;
         position: relative;
     }
 
@@ -261,6 +263,13 @@
         font-size: 1.2rem;
     }
 
+    .filter-group {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
     .filter-select {
         padding: 12px 20px;
         border: 2px solid var(--kai-gray-medium);
@@ -268,7 +277,7 @@
         font-size: 1rem;
         color: var(--kai-blue);
         background: var(--kai-white);
-        min-width: 150px;
+        min-width: 160px;
         transition: all 0.3s ease;
     }
 
@@ -276,6 +285,47 @@
         outline: none;
         border-color: var(--kai-orange);
         box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+    }
+
+    .filter-btn {
+        padding: 12px 25px;
+        background: linear-gradient(135deg, var(--kai-blue) 0%, var(--kai-dark-blue) 100%);
+        color: var(--kai-white);
+        border: none;
+        border-radius: 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-width: 120px;
+    }
+
+    .filter-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(30, 58, 138, 0.3);
+    }
+
+    .reset-btn {
+        padding: 12px 20px;
+        background: linear-gradient(135deg, var(--kai-gray-dark) 0%, #9CA3AF 100%);
+        color: var(--kai-white);
+        border: none;
+        border-radius: 20px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .reset-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(100, 116, 139, 0.3);
+        text-decoration: none;
+        color: var(--kai-white);
     }
 
     .table-container {
@@ -528,6 +578,19 @@
         .data-table td {
             padding: 8px 6px;
         }
+
+        .search-container {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .search-box {
+            max-width: 100%;
+        }
+
+        .filter-group {
+            justify-content: flex-start;
+        }
     }
 
     @media (max-width: 768px) {
@@ -547,9 +610,20 @@
         
         .search-container {
             flex-direction: column;
+            align-items: stretch;
         }
         
         .search-box {
+            min-width: 100%;
+            max-width: 100%;
+        }
+
+        .filter-group {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .filter-select {
             min-width: 100%;
         }
         
@@ -599,7 +673,7 @@
 
     /* Status badges */
     .status-badge {
-        padding: 4px 8px;
+        padding: 4px 12px;
         border-radius: 12px;
         font-size: 0.75rem;
         font-weight: 600;
@@ -698,24 +772,45 @@
         @endif
 
         <div class="search-filter-section">
-            <div class="search-container">
-                <div class="search-box">
-                    <input type="text" class="search-input" placeholder="Cari data jarak..." id="searchInput">
-                    <span class="search-icon">🔍</span>
+            <form action="{{ route('jarak.index') }}" method="GET">
+                <div class="search-container">
+                    <div class="search-box">
+                        <input type="text" 
+                               name="search" 
+                               class="search-input" 
+                               placeholder="🔍 Cari data jarak..." 
+                               value="{{ request('search') }}">
+                        <div class="search-icon">🔍</div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <select name="status" class="filter-select">
+                            <option value="">📊 Semua Status</option>
+                            <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>✅ Aktif</option>
+                            <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>❌ Tidak Aktif</option>
+                        </select>
+
+                        <select name="daop" class="filter-select">
+                            <option value="">🏢 Semua Daop</option>
+                            @foreach($daops as $daop)
+                                <option value="{{ $daop->id }}" {{ request('daop') == $daop->id ? 'selected' : '' }}>
+                                    {{ $daop->nama }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                        <button type="submit" class="filter-btn">
+                            <span>🔄</span>
+                            Terapkan
+                        </button>
+
+                        <a href="{{ route('jarak.index') }}" class="reset-btn">
+                            <span>↻</span>
+                            Reset
+                        </a>
+                    </div>
                 </div>
-                <select class="filter-select" id="filterSelect">
-                    <option value="">Semua Status</option>
-                    <option value="active">Aktif</option>
-                    <option value="inactive">Tidak Aktif</option>
-                    <option value="pending">Menunggu</option>
-                </select>
-                <select class="filter-select" id="daopFilter">
-                    <option value="">Semua Daop</option>
-                    <option value="1">Daop 1</option>
-                    <option value="2">Daop 2</option>
-                    <option value="3">Daop 3</option>
-                </select>
-            </div>
+            </form>
         </div>
 
         <div class="stats-bar">
@@ -729,7 +824,7 @@
             </div>
             <div class="stats-info">
                 <span>🛤️</span>
-                Lintas Aktif: <strong>{{ $jaraks->where('status', 'active')->count() }}</strong>
+                Lintas Aktif: <strong>{{ $jaraks->where('status', 1)->count() }}</strong>
             </div>
         </div>
 
@@ -772,12 +867,10 @@
                                 <td>{{ $jarak->taspat }}</td>
                                 <td><span style="color: var(--kai-warning);">{{ $jarak->puncak_kecepatan_barang }}</span></td>
                                 <td>
-                                    @if($jarak->status == 'active')
-                                        <span class="status-badge status-active">{{ $jarak->status }}</span>
-                                    @elseif($jarak->status == 'inactive')
-                                        <span class="status-badge status-inactive">{{ $jarak->status }}</span>
+                                    @if($jarak->status == 1)
+                                        <span class="status-badge status-active">Aktif</span>
                                     @else
-                                        <span class="status-badge status-pending">{{ $jarak->status }}</span>
+                                        <span class="status-badge status-inactive">Tidak Aktif</span>
                                     @endif
                                 </td>
                                 <td class="tooltip-text" data-tooltip="{{ $jarak->created_at }}">
@@ -789,7 +882,7 @@
                                 </td>
                                 <td>{{ $jarak->updated_by ?? '-' }}</td>
                                 <td class="tooltip-text" data-tooltip="{{ $jarak->approved_at }}">
-                                    {{ $jarak->created_at ? \Carbon\Carbon::parse($jarak->created_at)->format('d/m/Y') : '-' }}
+                                    {{ $jarak->approved_at ? \Carbon\Carbon::parse($jarak->approved_at)->format('d/m/Y') : '-' }}
                                 </td>
                                 <td>{{ $jarak->approved_by ?? '-' }}</td>
                                 <td>

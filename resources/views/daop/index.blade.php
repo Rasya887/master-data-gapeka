@@ -216,6 +216,29 @@
         color: var(--kai-white);
     }
 
+    .btn-outline-secondary {
+        background: transparent;
+        color: var(--kai-blue);
+        border: 2px solid var(--kai-gray-medium);
+    }
+
+    .btn-outline-secondary:hover {
+        background: var(--kai-blue);
+        color: var(--kai-white);
+        border-color: var(--kai-blue);
+    }
+
+    .btn-outline-danger {
+        background: transparent;
+        color: var(--kai-danger);
+        border: 2px solid var(--kai-danger);
+    }
+
+    .btn-outline-danger:hover {
+        background: var(--kai-danger);
+        color: var(--kai-white);
+    }
+
     .search-filter-section {
         padding: 30px 40px;
         background: linear-gradient(135deg, var(--kai-gray-light) 0%, rgba(59, 130, 246, 0.05) 100%);
@@ -235,18 +258,18 @@
         position: relative;
     }
 
-    .search-input {
+    .search-input, .form-control {
         width: 100%;
-        padding: 12px 45px 12px 20px;
+        padding: 12px 20px;
         border: 2px solid var(--kai-gray-medium);
-        border-radius: 25px;
+        border-radius: 10px;
         font-size: 1rem;
         color: var(--kai-blue);
         background: var(--kai-white);
         transition: all 0.3s ease;
     }
 
-    .search-input:focus {
+    .search-input:focus, .form-control:focus {
         outline: none;
         border-color: var(--kai-orange);
         box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
@@ -261,10 +284,10 @@
         font-size: 1.2rem;
     }
 
-    .filter-select {
+    .form-select {
         padding: 12px 20px;
         border: 2px solid var(--kai-gray-medium);
-        border-radius: 20px;
+        border-radius: 10px;
         font-size: 1rem;
         color: var(--kai-blue);
         background: var(--kai-white);
@@ -272,29 +295,31 @@
         transition: all 0.3s ease;
     }
 
-    .filter-select:focus {
+    .form-select:focus {
         outline: none;
         border-color: var(--kai-orange);
         box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
     }
 
-    .table-container {
-        padding: 0;
-        overflow-x: auto;
+    .table-responsive {
+        background: var(--kai-white);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
 
-    .data-table {
+    .table {
+        margin-bottom: 0;
         width: 100%;
         border-collapse: collapse;
-        background: var(--kai-white);
     }
 
-    .data-table thead {
+    .table-dark {
         background: linear-gradient(135deg, var(--kai-blue) 0%, var(--kai-dark-blue) 100%);
         color: var(--kai-white);
     }
 
-    .data-table th {
+    .table th {
         padding: 20px 15px;
         text-align: left;
         font-weight: 600;
@@ -303,83 +328,63 @@
         font-size: 0.9rem;
         position: relative;
         white-space: nowrap;
+        border: none;
     }
 
-    .data-table th:first-child {
+    .table th:first-child {
         padding-left: 30px;
     }
 
-    .data-table th:last-child {
+    .table th:last-child {
         padding-right: 30px;
         text-align: center;
     }
 
-    .data-table th::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 4px;
-        background: var(--kai-orange);
-    }
-
-    .data-table tbody tr {
+    .table tbody tr {
         transition: all 0.3s ease;
         border-bottom: 1px solid var(--kai-gray-medium);
     }
 
-    .data-table tbody tr:hover {
+    .table tbody tr:hover {
         background: linear-gradient(135deg, var(--kai-gray-light) 0%, rgba(59, 130, 246, 0.05) 100%);
-        transform: scale(1.005);
+        transform: scale(1.002);
     }
 
-    .data-table tbody tr:nth-child(even) {
+    .table-striped tbody tr:nth-child(even) {
         background: rgba(248, 250, 252, 0.5);
     }
 
-    .data-table tbody tr:nth-child(even):hover {
+    .table-striped tbody tr:nth-child(even):hover {
         background: linear-gradient(135deg, var(--kai-gray-light) 0%, rgba(59, 130, 246, 0.05) 100%);
     }
 
-    .data-table td {
+    .table td {
         padding: 15px;
         font-size: 1rem;
         color: var(--kai-blue);
         vertical-align: middle;
+        border: none;
     }
 
-    .data-table td:first-child {
+    .table td:first-child {
         padding-left: 30px;
         font-weight: 600;
         color: var(--kai-orange);
     }
 
-    .data-table td:last-child {
+    .table td:last-child {
         padding-right: 30px;
         text-align: center;
     }
 
-    .data-table td:nth-child(2) {
+    .table td:nth-child(2) {
         font-weight: 600;
         color: var(--kai-dark-blue);
     }
 
-    .action-buttons {
-        display: flex;
-        gap: 5px;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
-    .action-form {
-        display: inline-block;
-        margin: 0;
-    }
-
     .alert {
         padding: 15px 25px;
-        margin: 30px 40px 0;
+        margin-bottom: 20px;
         border-radius: 15px;
         border: none;
         font-weight: 500;
@@ -393,113 +398,90 @@
         color: var(--kai-white);
     }
 
-    .pagination-container {
-        padding: 30px 40px;
+    .d-flex {
         display: flex;
-        justify-content: center;
-        background: var(--kai-gray-light);
     }
 
-    .pagination {
-        display: flex;
-        gap: 5px;
-        align-items: center;
-    }
-
-    .page-link {
-        padding: 10px 15px;
-        background: var(--kai-white);
-        color: var(--kai-blue);
-        text-decoration: none;
-        border-radius: 10px;
-        border: 2px solid var(--kai-gray-medium);
-        font-weight: 500;
-        transition: all 0.3s ease;
-    }
-
-    .page-link:hover {
-        background: var(--kai-orange);
-        color: var(--kai-white);
-        border-color: var(--kai-orange);
-        transform: translateY(-2px);
-        text-decoration: none;
-    }
-
-    .page-link.active {
-        background: var(--kai-blue);
-        color: var(--kai-white);
-        border-color: var(--kai-blue);
-    }
-
-    .stats-bar {
-        padding: 20px 40px;
-        background: linear-gradient(135deg, var(--kai-gray-light) 0%, rgba(59, 130, 246, 0.05) 100%);
-        border-bottom: 1px solid var(--kai-gray-medium);
-        display: flex;
+    .justify-content-between {
         justify-content: space-between;
+    }
+
+    .justify-content-center {
+        justify-content: center;
+    }
+
+    .align-items-center {
         align-items: center;
-        flex-wrap: wrap;
-        gap: 20px;
     }
 
-    .stats-info {
-        color: var(--kai-blue);
-        font-weight: 500;
+    .gap-1 {
+        gap: 5px;
     }
 
-    .floating-elements {
-        position: fixed;
+    .mb-1 {
+        margin-bottom: 0.25rem;
+    }
+
+    .mb-3 {
+        margin-bottom: 1rem;
+    }
+
+    .mb-4 {
+        margin-bottom: 1.5rem;
+    }
+
+    .mt-3 {
+        margin-top: 1rem;
+    }
+
+    .text-muted {
+        color: var(--kai-gray-dark);
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .w-100 {
         width: 100%;
-        height: 100%;
-        pointer-events: none;
-        overflow: hidden;
-        z-index: 0;
     }
 
-    .floating-item {
-        position: absolute;
-        font-size: 2rem;
-        opacity: 0.03;
-        animation: float 12s ease-in-out infinite;
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: -0.75rem;
+        margin-right: -0.75rem;
     }
 
-    .floating-item:nth-child(1) {
-        top: 10%;
-        left: 5%;
-        animation-delay: 0s;
+    .col-md-2,
+    .col-md-4 {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+        margin-bottom: 1rem;
     }
 
-    .floating-item:nth-child(2) {
-        top: 60%;
-        right: 10%;
-        animation-delay: 4s;
+    .col-md-2 {
+        flex: 0 0 16.666667%;
+        max-width: 16.666667%;
     }
 
-    .floating-item:nth-child(3) {
-        bottom: 20%;
-        left: 15%;
-        animation-delay: 8s;
+    .col-md-4 {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
     }
 
-    .floating-item:nth-child(4) {
-        top: 30%;
-        right: 30%;
-        animation-delay: 2s;
+    .g-3 > * {
+        margin-bottom: 1rem;
     }
 
-    .floating-item:nth-child(5) {
-        bottom: 40%;
-        right: 5%;
-        animation-delay: 6s;
-    }
-
-    @keyframes float {
-        0%, 100% {
-            transform: translateY(0px) rotate(0deg);
-        }
-        50% {
-            transform: translateY(-20px) rotate(5deg);
-        }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: var(--kai-white);
+        border-radius: 15px;
+        margin-top: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     }
 
     /* Responsive design */
@@ -525,17 +507,27 @@
         .search-box {
             min-width: 100%;
         }
+
+        .row {
+            flex-direction: column;
+        }
+
+        .col-md-2,
+        .col-md-4 {
+            flex: 1;
+            max-width: 100%;
+        }
         
-        .data-table {
+        .table {
             font-size: 0.8rem;
         }
         
-        .data-table th,
-        .data-table td {
+        .table th,
+        .table td {
             padding: 10px 8px;
         }
         
-        .action-buttons {
+        .d-flex.gap-1 {
             flex-direction: column;
             gap: 3px;
         }
@@ -543,6 +535,11 @@
         .btn-sm {
             min-width: 60px;
             padding: 6px 12px;
+        }
+
+        .container {
+            margin: 10px;
+            padding: 15px;
         }
     }
 
@@ -571,133 +568,109 @@
     }
 </style>
 
-<div class="floating-elements">
-    <div class="floating-item">🚂</div>
-    <div class="floating-item">🏢</div>
-    <div class="floating-item">📊</div>
-    <div class="floating-item">🌐</div>
-    <div class="floating-item">📋</div>
-</div>
-
 <div class="main-container">
     <div class="page-header">
         <h1 class="page-title">Data Daop</h1>
-        <div class="decorative-line"></div>
         <p class="page-subtitle">Kelola Daerah Operasi</p>
+        <div class="decorative-line"></div>
     </div>
 
-    <div class="data-card">
-        <div class="card-header">
-            <div class="header-info">
-                <div class="header-icon">📊</div>
-                <h2 class="header-title">Daftar Daop</h2>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="mb-1">Data Daop</h1>
+                <p class="text-muted">Kelola Daerah Operasi</p>
             </div>
-            <div class="header-actions">
-                <a href="/home" class="btn btn-home">
-                    <span>🏠</span>
-                    Home
-                </a>
+            <div>
                 <a href="{{ route('daop.create') }}" class="btn btn-primary">
-                    <span>➕</span>
-                    Tambah Daop
+                    ➕ Tambah Daop
                 </a>
             </div>
         </div>
 
+        <!-- Alert -->
         @if (session('success'))
             <div class="alert alert-success">
-                <span>✅</span>
-                {{ session('success') }}
+                ✅ {{ session('success') }}
             </div>
         @endif
 
-        <div class="search-filter-section">
-            <div class="search-container">
-                <div class="search-box">
-                    <input type="text" class="search-input" placeholder="Cari data daop..." id="searchInput">
-                    <span class="search-icon">🔍</span>
-                </div>
-                <select class="filter-select" id="filterSelect">
-                    <option value="">Semua Data</option>
-                    <option value="region1">Region 1</option>
-                    <option value="region2">Region 2</option>
-                    <option value="region3">Region 3</option>
+        <!-- Filter & Search -->
+        <form method="GET" action="{{ route('daop.index') }}" class="row g-3 mb-3">
+            <div class="col-md-4">
+                <select name="region" class="form-select" onchange="this.form.submit()">
+                    <option value="">-- Semua Region --</option>
+                    <option value="1" {{ request('region') == '1' ? 'selected' : '' }}>Jawa</option>
+                    <option value="2" {{ request('region') == '2' ? 'selected' : '' }}>Sumatera</option>
                 </select>
             </div>
-        </div>
-
-        <div class="stats-bar">
-            <div class="stats-info">
-                <span>📈</span>
-                Total: <strong>{{ $daops->total() }}</strong> data
+            <div class="col-md-4">
+                <input type="text" name="search" class="form-control" placeholder="Cari Daop..." value="{{ request('search') }}">
             </div>
-            <div class="stats-info">
-                <span>📄</span>
-                Halaman: <strong>{{ $daops->currentPage() }}</strong> dari <strong>{{ $daops->lastPage() }}</strong>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-outline-secondary w-100">🔍 Cari</button>
             </div>
+            <div class="col-md-2">
+                <a href="{{ route('daop.index') }}" class="btn btn-outline-danger w-100">↺ Reset</a>
+            </div>
+        </form>
+
+        <!-- Statistik -->
+        <div class="mb-3">
+            <span>📈 Total: <strong>{{ $daops->total() }}</strong> data</span> |
+            <span>📄 Halaman: <strong>{{ $daops->currentPage() }}</strong> dari <strong>{{ $daops->lastPage() }}</strong></span>
         </div>
 
-        <div class="table-container">
-            @if($daops->count() > 0)
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Nama</th>
-                            <th>Singkatan</th>
-                            <th>Nomenklatur</th>
-                            <th>Daop</th>
-                            <th>ID Region</th>
-                            <th>Bus Area</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($daops as $index => $daop)
-                            <tr>
-                                <td>{{ ($daops->currentPage() - 1) * $daops->perPage() + $index + 1 }}</td>
-                                <td>{{ $daop->nama }}</td>
-                                <td>{{ $daop->singkatan }}</td>
-                                <td>{{ $daop->nomenklatur }}</td>
-                                <td>{{ $daop->daop }}</td>
-                                <td>{{ $daop->id_region }}</td>
-                                <td>{{ $daop->bus_area }}</td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <a href="{{ route('daop.show', $daop->id) }}" class="btn btn-info btn-sm">
-                                            <span>👁️</span>
-                                            Lihat
-                                        </a>
-                                        <a href="{{ route('daop.edit', $daop->id) }}" class="btn btn-warning btn-sm">
-                                            <span>✏️</span>
-                                            Edit
-                                        </a>
-                                        <form action="{{ route('daop.destroy', $daop->id) }}" method="POST" class="action-form" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                <span>🗑️</span>
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            @else
-                <div class="empty-state">
-                    <div class="empty-icon">📋</div>
-                    <div class="empty-title">Belum Ada Data</div>
-                    <div class="empty-message">Data daop belum tersedia. Silakan tambah data baru.</div>
-                </div>
-            @endif
+        <!-- Tabel Daop -->
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Nama</th>
+                        <th>Singkatan</th>
+                        <th>Nomenklatur</th>
+                        <th>Daop</th>
+                        <th>ID Region</th>
+                        <th>Bus Area</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($daops as $daop)
+                    <tr>
+                        <td>{{ ($daops->currentPage() - 1) * $daops->perPage() + $loop->iteration }}</td>
+                        <td>{{ $daop->nama }}</td>
+                        <td>{{ $daop->singkatan }}</td>
+                        <td>{{ $daop->nomenklatur }}</td>
+                        <td>{{ $daop->daop }}</td>
+                        <td>{{ $daop->id_region == 1 ? 'Jawa' : 'Sumatera' }}</td>
+                        <td>{{ $daop->bus_area }}</td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <a href="{{ route('daop.show', $daop->id) }}" class="btn btn-info btn-sm">👁️</a>
+                                <a href="{{ route('daop.edit', $daop->id) }}" class="btn btn-warning btn-sm">✏️</a>
+                                <form action="{{ route('daop.destroy', $daop->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-danger btn-sm">🗑️</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">📋 Belum ada data Daop.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
 
+        <!-- Pagination -->
         @if($daops->hasPages())
-            <div class="pagination-container">
-                {{ $daops->links() }}
+            <div class="d-flex justify-content-center mt-3">
+                {{ $daops->appends(request()->query())->links() }}
             </div>
         @endif
     </div>
@@ -705,34 +678,8 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Search functionality
-    const searchInput = document.getElementById('searchInput');
-    const filterSelect = document.getElementById('filterSelect');
-    const tableRows = document.querySelectorAll('.data-table tbody tr');
-    
-    function filterTable() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const filterValue = filterSelect.value.toLowerCase();
-        
-        tableRows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            const rowText = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
-            
-            const matchesSearch = rowText.includes(searchTerm);
-            const matchesFilter = filterValue === '' || rowText.includes(filterValue);
-            
-            if (matchesSearch && matchesFilter) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    }
-    
-    searchInput.addEventListener('input', filterTable);
-    filterSelect.addEventListener('change', filterTable);
-    
     // Animate table rows on load
+    const tableRows = document.querySelectorAll('.table tbody tr');
     tableRows.forEach((row, index) => {
         row.style.opacity = '0';
         row.style.transform = 'translateY(20px)';
@@ -744,18 +691,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }, index * 100);
     });
     
-    // Confirm delete with better styling
-    document.querySelectorAll('.action-form').forEach(form => {
+    // Enhanced delete confirmation
+    document.querySelectorAll('form[onsubmit*="confirm"]').forEach(form => {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             
             const confirmation = confirm('⚠️ Apakah Anda yakin ingin menghapus data ini?\n\nData yang sudah dihapus tidak dapat dikembalikan.');
             
             if (confirmation) {
+                // Remove the onsubmit attribute to prevent infinite loop
+                this.removeAttribute('onsubmit');
                 this.submit();
             }
         });
     });
+
+    // Auto-submit on region change
+    const regionSelect = document.querySelector('select[name="region"]');
+    if (regionSelect) {
+        regionSelect.addEventListener('change', function() {
+            this.form.submit();
+        });
+    }
 });
 </script>
 

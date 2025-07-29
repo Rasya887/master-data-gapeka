@@ -38,18 +38,22 @@ class Jarak extends Model
         'approved_at' => 'datetime',
     ];
 
-    public function daop()
-    {
-        return $this->belongsTo(Daop::class, 'id_daop');
-    }
+    // app/Models/Jarak.php
 
-    public function stasiun()
-    {
-        return $this->belongsTo(Stasiun::class, 'id_stasiun');
-    }
+public function daop()
+{
+    return $this->belongsTo(Daop::class, 'id_daop');
+}
 
-    public function stasiunSebelah()
-    {
-        return $this->belongsTo(Stasiun::class, 'id_stasiun_sebelah');
-    }
+public function stasiun()
+{
+    return $this->belongsTo(Stasiun::class, 'id_stasiun');
+}
+
+public function stasiunSebelah()
+{
+    return $this->belongsTo(Stasiun::class, 'id_stasiun_sebelah');
+}
+
+
 }

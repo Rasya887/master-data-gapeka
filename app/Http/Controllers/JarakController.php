@@ -10,11 +10,40 @@ use Illuminate\Support\Facades\Auth;
 
 class JarakController extends Controller
 {
-    public function index()
-    {
-        $jaraks = Jarak::with(['stasiun', 'stasiunSebelah', 'daop'])->paginate(10);
-        return view('jarak.index', compact('jaraks'));
+    public function index(Request $request)
+{
+    $query = Jarak::with(['daop', 'stasiun', 'stasiunSebelah']);
+
+    // Filter berdasarkan keyword pencarian
+    if ($request->filled('search')) {
+        $keyword = $request->search;
+        $query->whereHas('stasiun', function ($q) use ($keyword) {
+            $q->where('nama', 'like', "%$keyword%")
+              ->orWhere('singkatan', 'like', "%$keyword%");
+        })->orWhereHas('stasiunSebelah', function ($q) use ($keyword) {
+            $q->where('nama', 'like', "%$keyword%")
+              ->orWhere('singkatan', 'like', "%$keyword%");
+        });
     }
+
+    // Filter status
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    }
+
+    // Filter daop
+    if ($request->filled('daop')) {
+        $query->where('id_daop', $request->daop);
+    }
+
+    $jaraks = $query->paginate(10)->appends($request->all());
+    $daops = Daop::all();
+
+    return view('jarak.index', compact('jaraks', 'daops'));
+}
+
+
+
 
     public function create()
     {

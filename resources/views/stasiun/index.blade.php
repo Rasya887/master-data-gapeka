@@ -216,40 +216,98 @@
         color: var(--kai-white);
     }
 
+    .btn-clear {
+        background: linear-gradient(135deg, var(--kai-gray-dark) 0%, #94A3B8 100%);
+        color: var(--kai-white);
+        box-shadow: 0 3px 10px rgba(100, 116, 139, 0.3);
+        min-width: auto;
+        padding: 10px 15px;
+    }
+
+    .btn-clear:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 5px 15px rgba(100, 116, 139, 0.4);
+        text-decoration: none;
+        color: var(--kai-white);
+    }
+
+    /* Enhanced Search & Filter Section */
     .search-filter-section {
         padding: 30px 40px;
         background: linear-gradient(135deg, var(--kai-gray-light) 0%, rgba(59, 130, 246, 0.05) 100%);
         border-bottom: 1px solid var(--kai-gray-medium);
     }
 
-    .search-container {
+    .filter-header {
         display: flex;
-        gap: 20px;
+        justify-content: space-between;
         align-items: center;
+        margin-bottom: 20px;
         flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .filter-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--kai-blue);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .filter-controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .search-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr auto auto;
+        gap: 15px;
+        align-items: end;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .form-label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--kai-blue);
+        margin-bottom: 5px;
     }
 
     .search-box {
-        flex: 1;
-        min-width: 300px;
         position: relative;
     }
 
     .search-input {
         width: 100%;
-        padding: 12px 45px 12px 20px;
+        padding: 14px 45px 14px 20px;
         border: 2px solid var(--kai-gray-medium);
         border-radius: 25px;
         font-size: 1rem;
         color: var(--kai-blue);
         background: var(--kai-white);
         transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
 
     .search-input:focus {
         outline: none;
         border-color: var(--kai-orange);
-        box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+        box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-1px);
+    }
+
+    .search-input::placeholder {
+        color: var(--kai-gray-dark);
+        opacity: 0.7;
     }
 
     .search-icon {
@@ -259,23 +317,113 @@
         transform: translateY(-50%);
         color: var(--kai-gray-dark);
         font-size: 1.2rem;
+        pointer-events: none;
     }
 
     .filter-select {
-        padding: 12px 20px;
+        padding: 14px 20px;
         border: 2px solid var(--kai-gray-medium);
         border-radius: 20px;
         font-size: 1rem;
         color: var(--kai-blue);
         background: var(--kai-white);
-        min-width: 150px;
         transition: all 0.3s ease;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
 
     .filter-select:focus {
         outline: none;
         border-color: var(--kai-orange);
-        box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+        box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-1px);
+    }
+
+    .filter-select option {
+        padding: 10px;
+        background: var(--kai-white);
+        color: var(--kai-blue);
+    }
+
+    .search-btn {
+        background: linear-gradient(135deg, var(--kai-orange) 0%, #FF8A65 100%);
+        color: var(--kai-white);
+        border: none;
+        padding: 14px 25px;
+        border-radius: 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        height: fit-content;
+    }
+
+    .search-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+    }
+
+    /* Active Filters Display */
+    .active-filters {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid var(--kai-gray-medium);
+    }
+
+    .active-filters-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--kai-blue);
+        margin-bottom: 10px;
+    }
+
+    .filter-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .filter-tag {
+        background: linear-gradient(135deg, var(--kai-blue) 0%, var(--kai-light-blue) 100%);
+        color: var(--kai-white);
+        padding: 6px 12px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .filter-tag .remove-filter {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: var(--kai-white);
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 0.7rem;
+        transition: all 0.2s ease;
+    }
+
+    .filter-tag .remove-filter:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .table-container {
@@ -293,6 +441,9 @@
     .data-table thead {
         background: linear-gradient(135deg, var(--kai-blue) 0%, var(--kai-dark-blue) 100%);
         color: var(--kai-white);
+        position: sticky;
+        top: 0;
+        z-index: 10;
     }
 
     .data-table th {
@@ -334,6 +485,7 @@
     .data-table tbody tr:hover {
         background: linear-gradient(135deg, var(--kai-gray-light) 0%, rgba(59, 130, 246, 0.05) 100%);
         transform: scale(1.002);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
 
     .data-table tbody tr:nth-child(even) {
@@ -404,6 +556,12 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .alert-success {
@@ -463,6 +621,9 @@
     .stats-info {
         color: var(--kai-blue);
         font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .floating-elements {
@@ -522,12 +683,15 @@
 
     /* Status badges */
     .status-badge {
-        padding: 4px 8px;
-        border-radius: 12px;
+        padding: 6px 12px;
+        border-radius: 15px;
         font-size: 0.75rem;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
     }
 
     .status-active {
@@ -540,8 +704,41 @@
         color: var(--kai-white);
     }
 
+    /* Loading state */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid var(--kai-gray-medium);
+        border-top: 4px solid var(--kai-orange);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
     /* Responsive design */
     @media (max-width: 1200px) {
+        .search-container {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
         .data-table {
             font-size: 0.75rem;
         }
@@ -568,11 +765,12 @@
         }
         
         .search-container {
-            flex-direction: column;
+            grid-template-columns: 1fr;
         }
         
-        .search-box {
-            min-width: 100%;
+        .filter-header {
+            flex-direction: column;
+            align-items: flex-start;
         }
         
         .data-table {
@@ -617,8 +815,17 @@
     .empty-message {
         font-size: 1rem;
         opacity: 0.8;
+        margin-bottom: 20px;
+    }
+
+    .empty-suggestion {
+        margin-top: 20px;
     }
 </style>
+
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+</div>
 
 <div class="floating-elements">
     <div class="floating-item">🚉</div>
@@ -661,38 +868,115 @@
         @endif
 
         <div class="search-filter-section">
-            <div class="search-container">
-                <div class="search-box">
-                    <input type="text" class="search-input" placeholder="Cari stasiun berdasarkan nama, singkatan, atau kode..." id="searchInput">
-                    <span class="search-icon">🔍</span>
+            <div class="filter-header">
+                <div class="filter-title">
+                    <span>🔍</span>
+                    Pencarian & Filter
                 </div>
-                <select class="filter-select" id="filterStatus">
-                    <option value="">Semua Status</option>
-                    <option value="aktif">Aktif</option>
-                    <option value="tidak aktif">Tidak Aktif</option>
-                </select>
-                <select class="filter-select" id="filterDaop">
-                    <option value="">Semua Daop</option>
-                    @foreach($stasiuns->unique('daop.nama') as $stasiun)
-                        @if($stasiun->daop)
-                            <option value="{{ $stasiun->daop->nama }}">{{ $stasiun->daop->nama }}</option>
-                        @endif
-                    @endforeach
-                </select>
+                <div class="filter-controls">
+                    <button type="button" class="btn btn-clear" onclick="clearAllFilters()">
+                        <span>🗑️</span>
+                        Reset
+                    </button>
+                </div>
             </div>
+
+            <form action="{{ route('stasiun.index') }}" method="GET" id="filter-form">
+                <div class="search-container">
+                    <div class="form-group">
+                        <label class="form-label">Pencarian</label>
+                        <div class="search-box">
+                            <input type="text" 
+                                   name="search" 
+                                   value="{{ request('search') }}" 
+                                   placeholder="Cari berdasarkan nama, kode, atau singkatan stasiun..."
+                                   class="search-input"
+                                   autocomplete="off">
+                            <div class="search-icon">🔍</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Daop</label>
+                        <select name="daop" class="filter-select">
+                            <option value="">🏢 Semua Daop</option>
+                            @foreach($daops as $daop)
+                                <option value="{{ $daop->id }}" {{ request('daop') == $daop->id ? 'selected' : '' }}>
+                                    {{ $daop->nama }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select name="aktif" class="filter-select">
+                            <option value="">📋 Semua Status</option>
+                            <option value="1" {{ request('aktif') == '1' ? 'selected' : '' }}>✅ Aktif</option>
+                            <option value="0" {{ request('aktif') == '0' ? 'selected' : '' }}>❌ Non Aktif</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="search-btn">
+                            <span>🔍</span>
+                            Filter
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Active Filters Display -->
+            @if(request('search') || request('daop') || request('aktif'))
+                <div class="active-filters">
+                    <div class="active-filters-title">Filter Aktif:</div>
+                    <div class="filter-tags">
+                        @if(request('search'))
+                            <div class="filter-tag">
+                                <span>🔍 Pencarian: "{{ request('search') }}"</span>
+                                <button type="button" class="remove-filter" onclick="removeFilter('search')">×</button>
+                            </div>
+                        @endif
+                        @if(request('daop'))
+                            <div class="filter-tag">
+                                <span>🏢 Daop: {{ $daops->where('id', request('daop'))->first()->nama ?? 'Unknown' }}</span>
+                                <button type="button" class="remove-filter" onclick="removeFilter('daop')">×</button>
+                            </div>
+                        @endif
+                        @if(request('aktif') !== null && request('aktif') !== '')
+                            <div class="filter-tag">
+                                <span>📋 Status: {{ request('aktif') == '1' ? 'Aktif' : 'Non Aktif' }}</span>
+                                <button type="button" class="remove-filter" onclick="removeFilter('aktif')">×</button>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endif
         </div>
 
         <div class="stats-bar">
             <div class="stats-info">
                 <span>📊</span>
-                Total: <strong>{{ $stasiuns->total() }}</strong> stasiun
+                <span>Total: <strong>{{ $stasiuns instanceof \Illuminate\Pagination\LengthAwarePaginator ? $stasiuns->total() : $stasiuns->count() }}</strong> stasiun</span>
             </div>
+
             <div class="stats-info">
                 <span>📄</span>
-                Halaman: <strong>{{ $stasiuns->currentPage() }}</strong> dari <strong>{{ $stasiuns->lastPage() }}</strong>
+                @if ($stasiuns instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                    <span>Halaman: <strong>{{ $stasiuns->currentPage() }}</strong> dari <strong>{{ $stasiuns->lastPage() }}</strong></span>
+                @else
+                    <span><strong>Menampilkan semua hasil</strong></span>
+                @endif
             </div>
-        </div>
 
+            @if(request('search') || request('daop') || request('aktif'))
+                <div class="stats-info">
+                    <span>🎯</span>
+                    <span>Hasil Filter</span>
+                </div>
+            @endif
+        </div>
+        
         <div class="table-container">
             @if($stasiuns->count() > 0)
                 <table class="data-table">
@@ -725,12 +1009,12 @@
                                 <td>{{ $stasiun->id }}</td>
                                 <td>{{ $stasiun->daop->nama ?? '-' }}</td>
                                 <td>{{ $stasiun->singkatan }}</td>
-                                <td>{{ $stasiun->nama }}</td>
+                                <td title="{{ $stasiun->nama }}">{{ $stasiun->nama }}</td>
                                 <td>{{ $stasiun->dpl }}</td>
                                 <td>{{ $stasiun->kode }}</td>
                                 <td>
                                     <span class="status-badge {{ $stasiun->aktif ? 'status-active' : 'status-inactive' }}">
-                                        {{ $stasiun->aktif ? 'Aktif' : 'Tidak Aktif' }}
+                                        {{ $stasiun->aktif ? '✅ Aktif' : '❌ Non-Aktif' }}
                                     </span>
                                 </td>
                                 <td>{{ $stasiun->kotak }}</td>
@@ -738,26 +1022,39 @@
                                 <td>{{ $stasiun->garis_tebal }}</td>
                                 <td>{{ $stasiun->perhentian }}</td>
                                 <td>{{ $stasiun->batas_daop }}</td>
-                                <td>{{ $stasiun->created_at ? $stasiun->created_at->format('d/m/Y') : '-' }}</td>
-                                <td>{{ $stasiun->updated_at ? $stasiun->updated_at->format('d/m/Y') : '-' }}</td>
+                                <td title="{{ $stasiun->created_at ? $stasiun->created_at->format('d/m/Y H:i') : '-' }}">
+                                    {{ $stasiun->created_at ? $stasiun->created_at->format('d/m/Y') : '-' }}
+                                </td>
+                                <td title="{{ $stasiun->updated_at ? $stasiun->updated_at->format('d/m/Y H:i') : '-' }}">
+                                    {{ $stasiun->updated_at ? $stasiun->updated_at->format('d/m/Y') : '-' }}
+                                </td>
                                 <td>{{ $stasiun->created_by ?? '-' }}</td>
                                 <td>{{ $stasiun->updated_by ?? '-' }}</td>
                                 <td>{{ $stasiun->track }}</td>
                                 <td>{{ $stasiun->ppkt }}</td>
                                 <td>
                                     <div class="action-buttons">
-                                        <a href="{{ route('stasiun.show', $stasiun->id) }}" class="btn btn-info btn-sm">
+                                        <a href="{{ route('stasiun.show', $stasiun->id) }}" 
+                                           class="btn btn-info btn-sm" 
+                                           title="Lihat Detail">
                                             <span>👁️</span>
                                             Lihat
                                         </a>
-                                        <a href="{{ route('stasiun.edit', $stasiun->id) }}" class="btn btn-warning btn-sm">
+                                        <a href="{{ route('stasiun.edit', $stasiun->id) }}" 
+                                           class="btn btn-warning btn-sm"
+                                           title="Edit Data">
                                             <span>✏️</span>
                                             Edit
                                         </a>
-                                        <form action="{{ route('stasiun.destroy', $stasiun->id) }}" method="POST" class="action-form">
+                                        <form action="{{ route('stasiun.destroy', $stasiun->id) }}" 
+                                              method="POST" 
+                                              class="action-form"
+                                              onsubmit="return confirmDelete('{{ $stasiun->nama }}')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('⚠️ Apakah Anda yakin ingin menghapus stasiun ini?\n\nData yang sudah dihapus tidak dapat dikembalikan.')">
+                                            <button type="submit" 
+                                                    class="btn btn-danger btn-sm" 
+                                                    title="Hapus Data">
                                                 <span>🗑️</span>
                                                 Hapus
                                             </button>
@@ -771,86 +1068,208 @@
             @else
                 <div class="empty-state">
                     <div class="empty-icon">🚉</div>
-                    <div class="empty-title">Belum Ada Data Stasiun</div>
-                    <div class="empty-message">Data stasiun belum tersedia. Silakan tambah data stasiun baru.</div>
+                    <div class="empty-title">
+                        @if(request('search') || request('daop') || request('aktif'))
+                            Tidak Ada Data yang Sesuai
+                        @else
+                            Belum Ada Data Stasiun
+                        @endif
+                    </div>
+                    <div class="empty-message">
+                        @if(request('search') || request('daop') || request('aktif'))
+                            Tidak ditemukan data stasiun yang sesuai dengan kriteria pencarian Anda.
+                            <br>Coba ubah filter atau kata kunci pencarian.
+                        @else
+                            Data stasiun belum tersedia. Silakan tambah data stasiun baru untuk memulai.
+                        @endif
+                    </div>
+                    @if(request('search') || request('daop') || request('aktif'))
+                        <div class="empty-suggestion">
+                            <button type="button" class="btn btn-primary" onclick="clearAllFilters()">
+                                <span>🔄</span>
+                                Reset Filter
+                            </button>
+                        </div>
+                    @else
+                        <div class="empty-suggestion">
+                            <a href="{{ route('stasiun.create') }}" class="btn btn-primary">
+                                <span>➕</span>
+                                Tambah Stasiun Pertama
+                            </a>
+                        </div>
+                    @endif
                 </div>
             @endif
         </div>
 
-        @if($stasiuns->hasPages())
+        @if ($stasiuns instanceof \Illuminate\Pagination\LengthAwarePaginator && $stasiuns->hasPages())
             <div class="pagination-container">
-                {{ $stasiuns->links() }}
+                {{ $stasiuns->appends(request()->query())->links() }}
             </div>
         @endif
     </div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Search and filter functionality
-    const searchInput = document.getElementById('searchInput');
-    const filterStatus = document.getElementById('filterStatus');
-    const filterDaop = document.getElementById('filterDaop');
-    const tableRows = document.querySelectorAll('.data-table tbody tr');
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("filter-form");
+    const inputs = form.querySelectorAll("input[name='search'], select[name='daop'], select[name='aktif']");
+    const loadingOverlay = document.getElementById("loadingOverlay");
+
+    // Auto-submit form on input change with debounce for search
+    let searchTimeout;
     
-    function filterTable() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const statusFilter = filterStatus.value.toLowerCase();
-        const daopFilter = filterDaop.value.toLowerCase();
-        
-        tableRows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            const rowText = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
-            
-            const matchesSearch = rowText.includes(searchTerm);
-            const matchesStatus = statusFilter === '' || rowText.includes(statusFilter);
-            const matchesDaop = daopFilter === '' || rowText.includes(daopFilter);
-            
-            if (matchesSearch && matchesStatus && matchesDaop) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    }
-    
-    searchInput.addEventListener('input', filterTable);
-    filterStatus.addEventListener('change', filterTable);
-    filterDaop.addEventListener('change', filterTable);
-    
-    // Animate table rows on load
-    tableRows.forEach((row, index) => {
-        row.style.opacity = '0';
-        row.style.transform = 'translateY(20px)';
-        
-        setTimeout(() => {
-            row.style.transition = 'all 0.5s ease';
-            row.style.opacity = '1';
-            row.style.transform = 'translateY(0)';
-        }, index * 50);
-    });
-    
-    // Enhanced delete confirmation
-    document.querySelectorAll('.action-form').forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const stationName = this.closest('tr').querySelector('td:nth-child(4)').textContent;
-            const confirmation = confirm(`⚠️ Apakah Anda yakin ingin menghapus stasiun "${stationName}"?\n\nData yang sudah dihapus tidak dapat dikembalikan.`);
-            
-            if (confirmation) {
-                this.submit();
-            }
-        });
-    });
-    
-    // Tooltip for truncated text
-    document.querySelectorAll('.data-table td').forEach(cell => {
-        if (cell.scrollWidth > cell.clientWidth) {
-            cell.title = cell.textContent;
+    inputs.forEach(input => {
+        if (input.name === 'search') {
+            // Debounce search input
+            input.addEventListener("input", function () {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    submitForm();
+                }, 500); // Wait 500ms after user stops typing
+            });
+        } else {
+            // Immediate submit for selects
+            input.addEventListener("change", function () {
+                submitForm();
+            });
         }
     });
+
+    function submitForm() {
+        // Show loading overlay
+        loadingOverlay.style.display = 'flex';
+        
+        // Remove existing page input
+        const pageInput = form.querySelector("input[name='page']");
+        if (pageInput) pageInput.remove();
+
+        // Add page=1 to start from beginning
+        const newPageInput = document.createElement("input");
+        newPageInput.type = "hidden";
+        newPageInput.name = "page";
+        newPageInput.value = "1";
+        form.appendChild(newPageInput);
+
+        form.submit();
+    }
+
+    // Enhanced search with suggestions (could be implemented with AJAX)
+    const searchInput = form.querySelector("input[name='search']");
+    if (searchInput) {
+        searchInput.addEventListener("focus", function() {
+            this.placeholder = "Ketik nama stasiun, kode, atau singkatan...";
+        });
+        
+        searchInput.addEventListener("blur", function() {
+            this.placeholder = "Cari berdasarkan nama, kode, atau singkatan stasiun...";
+        });
+    }
+});
+
+// Clear all filters
+function clearAllFilters() {
+    const form = document.getElementById("filter-form");
+    const inputs = form.querySelectorAll("input[name='search'], select[name='daop'], select[name='aktif']");
+    
+    inputs.forEach(input => {
+        if (input.type === 'text') {
+            input.value = '';
+        } else if (input.type === 'select-one') {
+            input.selectedIndex = 0;
+        }
+    });
+    
+    // Remove page parameter and submit
+    const pageInput = form.querySelector("input[name='page']");
+    if (pageInput) pageInput.remove();
+    
+    // Show loading and submit
+    document.getElementById("loadingOverlay").style.display = 'flex';
+    form.submit();
+}
+
+// Remove specific filter
+function removeFilter(filterName) {
+    const form = document.getElementById("filter-form");
+    const input = form.querySelector(`[name='${filterName}']`);
+    
+    if (input) {
+        if (input.type === 'text') {
+            input.value = '';
+        } else if (input.type === 'select-one') {
+            input.selectedIndex = 0;
+        }
+        
+        // Remove page parameter and submit
+        const pageInput = form.querySelector("input[name='page']");
+        if (pageInput) pageInput.remove();
+        
+        document.getElementById("loadingOverlay").style.display = 'flex';
+        form.submit();
+    }
+}
+
+// Enhanced delete confirmation
+function confirmDelete(stationName) {
+    const confirmMessage = `⚠️ KONFIRMASI PENGHAPUSAN ⚠️\n\n` +
+                          `Apakah Anda yakin ingin menghapus stasiun:\n"${stationName}"\n\n` +
+                          `⚠️ PERINGATAN:\n` +
+                          `• Data yang sudah dihapus tidak dapat dikembalikan\n` +
+                          `• Semua data terkait akan ikut terhapus\n\n` +
+                          `Klik OK untuk melanjutkan atau Cancel untuk membatalkan.`;
+    
+    return confirm(confirmMessage);
+}
+
+// Export functionality (placeholder)
+function exportData() {
+    const currentUrl = new URL(window.location);
+    const params = new URLSearchParams(currentUrl.search);
+    
+    // Add export parameter
+    params.set('export', 'excel');
+    
+    // Create download link
+    const exportUrl = `${currentUrl.pathname}?${params.toString()}`;
+    
+    // You can replace this with actual export functionality
+    alert(`🚧 Fitur Export akan segera tersedia!\n\nURL Export: ${exportUrl}`);
+    
+    // Uncomment below for actual export
+    // window.location.href = exportUrl;
+}
+
+// Keyboard shortcuts
+document.addEventListener("keydown", function(event) {
+    // Ctrl/Cmd + K to focus search
+    if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+        event.preventDefault();
+        const searchInput = document.querySelector("input[name='search']");
+        if (searchInput) {
+            searchInput.focus();
+            searchInput.select();
+        }
+    }
+    
+    // Escape to clear search
+    if (event.key === 'Escape') {
+        const searchInput = document.querySelector("input[name='search']");
+        if (searchInput && searchInput === document.activeElement) {
+            searchInput.value = '';
+            searchInput.blur();
+        }
+    }
+});
+
+// Hide loading overlay when page loads
+window.addEventListener('load', function() {
+    document.getElementById("loadingOverlay").style.display = 'none';
+});
+
+// Show loading overlay on page unload (for navigation)
+window.addEventListener('beforeunload', function() {
+    document.getElementById("loadingOverlay").style.display = 'flex';
 });
 </script>
-
 @endsection

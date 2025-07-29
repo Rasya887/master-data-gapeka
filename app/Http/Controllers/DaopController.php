@@ -7,11 +7,29 @@ use Illuminate\Http\Request;
 
 class DaopController extends Controller
 {
-    public function index()
-    {
-        $daops = Daop::orderBy('id', 'asc')->paginate(10);
-        return view('daop.index', compact('daops'));
+    public function index(Request $request)
+{
+    $query = Daop::query();
+
+    // Filter berdasarkan region (kolom: id_region)
+    if ($request->filled('region')) {
+        $query->where('id_region', $request->region);
     }
+
+    // Filter pencarian keyword (nama/singkatan)
+    if ($request->filled('search')) {
+        $keyword = $request->search;
+        $query->where(function ($q) use ($keyword) {
+            $q->where('nama', 'like', "%$keyword%")
+              ->orWhere('singkatan', 'like', "%$keyword%");
+        });
+    }
+
+    $daops = $query->paginate(10)->appends($request->all());
+
+    return view('daop.index', compact('daops'));
+}
+
 
     public function create()
     {

@@ -349,6 +349,17 @@
                     <a href="{{ url('/menus') }}" class="sidebar-menu-item">
                         <i>📋</i> Manajemen Menus
                     </a>
+                    
+                    <div class="sidebar-section">Master Data</div>
+                    <a href="{{ route('daop.index') }}" class="sidebar-menu-item">
+                        <i>🚄</i> Master Daop
+                    </a>
+                    <a href="{{ route('stasiun.index') }}" class="sidebar-menu-item">
+                        <i>🏢</i> Master Stasiun
+                    </a>
+                    <a href="{{ route('jarak.index') }}" class="sidebar-menu-item">
+                        <i>📏</i> Master Jarak
+                    </a>
                 </div>
 
                 <div class="sidebar-profile">
