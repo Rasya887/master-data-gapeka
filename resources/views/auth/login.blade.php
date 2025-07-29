@@ -248,7 +248,7 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 
-                                {}{-- {!! NoCaptcha::display() !!} --}}
+                                 {!! NoCaptcha::display() !!} 
                                 <div class="mb-3">
                     <div class="g-recaptcha" data-sitekey="6LcaepErAAAAAGgXSKy9T6g_85GN9rnzGxvoxfDe"></div>
                     @if ($errors->has('g-recaptcha-response'))
