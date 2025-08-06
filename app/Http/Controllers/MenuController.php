@@ -4,62 +4,59 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class MenuController extends Controller
 {
     public function index()
     {
         $menus = Menu::orderBy('menu_order')->get();
-        return view('menus.index', compact('menus'));
+
+        return Inertia::render('admin/Menu/Index', [
+            'menus' => $menus,
+        ]);
     }
 
     public function create()
     {
-        return view('menus.create');
+        return Inertia::render('admin/Menu/Create');
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'route' => 'nullable|string|max:255',
-            'icon' => 'nullable|string|max:255',
             'menu_order' => 'nullable|numeric',
-            'is_active' => 'required|boolean',
+            'status' => 'required|boolean',
         ]);
 
-        // Fallback jika menu_order tidak diisi
-        $data = $request->all();
-        if (!isset($data['menu_order'])) {
-            $data['menu_order'] = 0;
-        }
+        $validated['menu_order'] = $validated['menu_order'] ?? 0;
 
-        Menu::create($data);
+        Menu::create($validated);
 
         return redirect()->route('menus.index')->with('success', 'Menu berhasil ditambahkan.');
     }
 
     public function edit(Menu $menu)
     {
-        return view('menus.edit', compact('menu'));
+        return Inertia::render('admin/Menu/Edit', [
+            'menu' => $menu,
+        ]);
     }
 
     public function update(Request $request, Menu $menu)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'route' => 'nullable|string|max:255',
-            'icon' => 'nullable|string|max:255',
             'menu_order' => 'nullable|numeric',
             'is_active' => 'required|boolean',
         ]);
 
-        $data = $request->all();
-        if (!isset($data['menu_order'])) {
-            $data['menu_order'] = 0;
-        }
+        $validated['menu_order'] = $validated['menu_order'] ?? 0;
 
-        $menu->update($data);
+        $menu->update($validated);
 
         return redirect()->route('menus.index')->with('success', 'Menu berhasil diupdate.');
     }
@@ -67,6 +64,7 @@ class MenuController extends Controller
     public function destroy(Menu $menu)
     {
         $menu->delete();
+
         return redirect()->route('menus.index')->with('success', 'Menu berhasil dihapus.');
     }
 }

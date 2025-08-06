@@ -55,5 +55,4 @@ public function stasiunSebelah()
     return $this->belongsTo(Stasiun::class, 'id_stasiun_sebelah');
 }
 
-
 }

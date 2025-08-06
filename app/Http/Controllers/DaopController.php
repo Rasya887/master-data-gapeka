@@ -4,36 +4,42 @@ namespace App\Http\Controllers;
 
 use App\Models\Daop;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class DaopController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:Admin|Editor', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
+    }
+
     public function index(Request $request)
-{
-    $query = Daop::query();
+    {
+        $query = Daop::query();
 
-    // Filter berdasarkan region (kolom: id_region)
-    if ($request->filled('region')) {
-        $query->where('id_region', $request->region);
+        if ($request->filled('region')) {
+            $query->where('id_region', $request->region);
+        }
+
+        if ($request->filled('search')) {
+            $keyword = $request->search;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('nama', 'like', "%$keyword%")
+                  ->orWhere('singkatan', 'like', "%$keyword%");
+            });
+        }
+
+        $daops = $query->paginate(10)->appends($request->all());
+
+        return Inertia::render('admin/Daop/Index', [
+            'daops' => $daops,
+            'filters' => $request->only('search', 'region'),
+        ]);
     }
-
-    // Filter pencarian keyword (nama/singkatan)
-    if ($request->filled('search')) {
-        $keyword = $request->search;
-        $query->where(function ($q) use ($keyword) {
-            $q->where('nama', 'like', "%$keyword%")
-              ->orWhere('singkatan', 'like', "%$keyword%");
-        });
-    }
-
-    $daops = $query->paginate(10)->appends($request->all());
-
-    return view('daop.index', compact('daops'));
-}
-
 
     public function create()
     {
-        return view('daop.create');
+        return Inertia::render('admin/Daop/Create');
     }
 
     public function store(Request $request)
@@ -47,17 +53,18 @@ class DaopController extends Controller
             'bus_area' => 'nullable|string|max:50',
         ]);
 
-        $data = $request->only(['nama', 'singkatan', 'nomenklatur', 'daop', 'id_region', 'bus_area']);
+        Daop::create($request->only([
+            'nama', 'singkatan', 'nomenklatur', 'daop', 'id_region', 'bus_area'
+        ]));
 
-        Daop::create($data);
-
-        return redirect()->route('daop.index')->with('success', 'Data Daop berhasil ditambahkan');
+        return redirect()->route('daops.index')->with('success', 'Data Daop berhasil ditambahkan');
     }
 
     public function edit($id)
     {
-        $daop = Daop::findOrFail($id);
-        return view('daop.edit', compact('daop'));
+        return Inertia::render('admin/Daop/Edit', [
+            'daop' => Daop::findOrFail($id),
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -72,10 +79,11 @@ class DaopController extends Controller
         ]);
 
         $daop = Daop::findOrFail($id);
-        $data = $request->only(['nama', 'singkatan', 'nomenklatur', 'daop', 'id_region', 'bus_area']);
-        $daop->update($data);
+        $daop->update($request->only([
+            'nama', 'singkatan', 'nomenklatur', 'daop', 'id_region', 'bus_area'
+        ]));
 
-        return redirect()->route('daop.index')->with('success', 'Data Daop berhasil diupdate');
+        return redirect()->route('daops.index')->with('success', 'Data Daop berhasil diupdate');
     }
 
     public function destroy($id)
@@ -83,12 +91,14 @@ class DaopController extends Controller
         $daop = Daop::findOrFail($id);
         $daop->delete();
 
-        return redirect()->route('daop.index')->with('success', 'Data Daop berhasil dihapus');
+        return redirect()->route('daops.index')->with('success', 'Data Daop berhasil dihapus');
     }
 
-    public function show($id)
-    {
-        $daop = Daop::findOrFail($id);
-        return view('daop.show', compact('daop'));
-    }
+        public function show($id)
+{
+    $daop = Daop::findOrFail($id);
+    return Inertia::render('admin/Daop/Show', [
+        'daop' => $daop
+    ]);
+}
 }

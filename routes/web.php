@@ -1,61 +1,70 @@
 <?php
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
+use Inertia\Inertia;
+
+// Auth
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
+// Master Data
 use App\Http\Controllers\DaopController;
 use App\Http\Controllers\StasiunController;
 use App\Http\Controllers\JarakController;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\ImportController;
+
+// RBAC
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MenuController;
 
+/*
+|--------------------------------------------------------------------------
+| Guest Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+    ->middleware('guest')
+    ->name('login');
+
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+    ->middleware('guest');
+
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('logout');
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Authenticated Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // View-only for all roles
+    Route::get('/daops', [DaopController::class, 'index'])->name('daops.index');
+    Route::get('/stasiuns', [StasiunController::class, 'index'])->name('stasiuns.index');
+    Route::get('/jarak', [JarakController::class, 'index'])->name('jarak.index');
 
-    Route::get('/import-jarak', [ImportController::class, 'showForm']);
-    Route::post('/import-jarak', [ImportController::class, 'import'])->name('jarak.import');
-
-    
-Route::get('/import/daop', [ImportController::class, 'formDaop'])->name('import.daop.form');
-Route::post('/import/daop', [ImportController::class, 'importDaop'])->name('import.daop');
-
-    // Semua role bisa akses index (baca)
-    Route::get('daop', [DaopController::class, 'index'])->name('daop.index');
-    Route::get('stasiun', [StasiunController::class, 'index'])->name('stasiun.index');
-    Route::get('jarak', [JarakController::class, 'index'])->name('jarak.index');
-
-    // Hanya Admin & Editor yang bisa CRUD penuh
-    Route::middleware(['role:Admin|Editor'])->group(function () {
-        Route::resource('daop', DaopController::class)->except(['index']);
-Route::resource('stasiun', StasiunController::class)->except(['index']);
-Route::resource('jarak', JarakController::class)->except(['index']);
-
-    });
 });
-Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+/*
+|--------------------------------------------------------------------------
+| Admin Only Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:Admin'])->group(function () {
+    // Master Data CRUD
+    Route::resource('daops', DaopController::class)->except(['index', 'show']);
+    Route::get('/daops/{id}/show', [DaopController::class, 'show'])->name('daops.show');
+    Route::resource('stasiuns', StasiunController::class)->except(['index', 'show']);
+    Route::get('/stasiuns/{id}/show', [StasiunController::class, 'show'])->name('stasiuns.show');
+    Route::resource('jarak', JarakController::class)->only(['create', 'store', 'edit', 'update', 'destroy']);
+    Route::get('/jarak/{id}/show', [JarakController::class, 'show'])->name('jarak.show');
 
-Route::middleware(['role:Admin|Editor'])->group(function () {
-        Route::resource('users', UserController::class);
-        Route::resource('roles', RoleController::class);
-        Route::resource('menus', MenuController::class);
-    });
-
+    // RBAC Management
+    Route::resource('roles', RoleController::class)->except(['show']);
+    Route::resource('users', UserController::class)->except(['show']);
+    Route::resource('menus', MenuController::class)->except(['show']);
+});

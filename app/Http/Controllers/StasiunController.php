@@ -5,125 +5,138 @@ namespace App\Http\Controllers;
 use App\Models\Stasiun;
 use App\Models\Daop;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
+use Inertia\Inertia;
 
 class StasiunController extends Controller
 {
-    
-public function index(Request $request)
+    public function __construct()
+    {
+        $this->middleware('role:Admin|Editor', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
+    }
+
+    public function index(Request $request)
 {
-    // Awal query: JOIN ke daops
-    $query = Stasiun::join('daops', 'stasiuns.id_daop', '=', 'daops.id')
-        ->select('stasiuns.*') // Hindari duplikasi kolom dari join
-        ->with('daop');
+    $query = Stasiun::with('daop');
 
-    // Filter by ID Daop (dropdown)
-    if ($request->filled('daop')) {
-        $query->where('stasiuns.id_daop', $request->daop);
-    }
-
-    // Filter status aktif
-    if ($request->filled('aktif')) {
-        $query->where('stasiuns.aktif', $request->aktif);
-    }
-
-    // Keyword search: cari di nama, singkatan, dan nama daop
     if ($request->filled('search')) {
-        $keyword = $request->search;
-        $query->where(function ($q) use ($keyword) {
-            $q->where('stasiuns.nama', 'like', "%$keyword%")
-              ->orWhere('stasiuns.singkatan', 'like', "%$keyword%")
-              ->orWhere('daops.nama', 'like', "%$keyword%");
+        $query->where(function ($q) use ($request) {
+            $q->where('nama', 'like', '%' . $request->search . '%')
+              ->orWhere('singkatan', 'like', '%' . $request->search . '%')
+              ->orWhere('kode', 'like', '%' . $request->search . '%');
         });
     }
 
-    // Pagination dengan query string tetap terbawa
-    $stasiuns = $query->orderBy('stasiuns.nama')->paginate(10)->appends($request->all());
+    if ($request->filled('daop')) {
+        $query->where('id_daop', $request->daop);
+    }
 
-    // Daftar daop buat dropdown filter
-    $daops = Daop::all();
+    if ($request->filled('aktif')) {
+        $query->where('aktif', $request->aktif);
+    }
 
-    return view('stasiun.index', compact('stasiuns', 'daops'));
+    $stasiuns = $query->orderBy('id', 'asc')
+        ->paginate(20)
+        ->withQueryString();
+
+    $daops = Daop::select('id', 'nama')->get();
+
+    return Inertia::render('admin/Stasiun/Index', [
+        'stasiuns' => $stasiuns,
+        'daops' => $daops,
+        'filters' => [
+            'search' => $request->search,
+            'daop' => $request->daop,
+            'aktif' => $request->aktif,
+        ],
+    ]);
 }
-
-
 
     public function create()
     {
-        $daops = Daop::all();
-        return view('stasiun.create', compact('daops'));
+        return Inertia::render('admin/Stasiun/Create', [
+            'daops' => Daop::orderBy('nama')->get()
+        ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'id_daop' => 'required|exists:daops,id',
-            'singkatan' => 'required|string|max:10',
+            'singkatan' => 'nullable|string|max:10',
             'nama' => 'required|string|max:100',
             'dpl' => 'nullable|numeric',
             'kode' => 'nullable|string|max:10',
             'aktif' => 'nullable|boolean',
-            'kotak' => 'nullable|boolean',
-            'garis_tipis' => 'nullable|boolean',
-            'garis_tebal' => 'nullable|boolean',
-            'perhentian' => 'nullable|boolean',
+            'kotak' => 'nullable|string|max:100',
+            'garis_tipis' => 'nullable|string|max:100',
+            'garis_tebal' => 'nullable|string|max:100',
+            'perhentian' => 'nullable|string|max:100',
             'batas_daop' => 'nullable|boolean',
             'track' => 'nullable|string|max:100',
-            'ppkt' => 'nullable|boolean'
+            'ppkt' => 'nullable|string|max:100',
         ]);
 
-        $data = $request->all();
-        $data['created_by'] = Auth::user()->name ?? 'system';
+        Stasiun::create($request->only([
+            'id_daop', 'singkatan', 'nama', 'dpl', 'kode', 'aktif', 'kotak',
+            'garis_tipis', 'garis_tebal', 'perhentian', 'batas_daop', 'track', 'ppkt'
+        ]) + [
+            'created_by' => auth()->id(),
+        ]);
 
-        Stasiun::create($data);
-
-        return redirect()->route('stasiun.index')->with('success', 'Data stasiun berhasil ditambahkan.');
+        return redirect()->route('stasiuns.index')->with('success', 'Data Stasiun berhasil ditambahkan');
     }
 
     public function edit($id)
     {
-        $stasiun = Stasiun::findOrFail($id);
-        $daops = Daop::all();
-        return view('stasiun.edit', compact('stasiun', 'daops'));
+        return Inertia::render('admin/Stasiun/Edit', [
+            'stasiun' => Stasiun::findOrFail($id),
+            'daops' => Daop::orderBy('nama')->get()
+        ]);
     }
 
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'id_daop' => 'required|exists:daops,id',
-            'singkatan' => 'required|string|max:10',
-            'nama' => 'required|string|max:100',
-            'dpl' => 'nullable|numeric',
-            'kode' => 'nullable|string|max:10',
-            'aktif' => 'nullable|boolean',
-            'kotak' => 'nullable|boolean',
-            'garis_tipis' => 'nullable|boolean',
-            'garis_tebal' => 'nullable|boolean',
-            'perhentian' => 'nullable|boolean',
-            'batas_daop' => 'nullable|boolean',
-            'track' => 'nullable|string|max:100',
-            'ppkt' => 'nullable|boolean'
-        ]);
+{
+    $stasiun = Stasiun::findOrFail($id);
 
-        $stasiun = Stasiun::findOrFail($id);
-        $data = $request->all();
-        $data['updated_by'] = Auth::user()->name ?? 'system';
+    $validated = $request->validate([
+        'id_daop' => 'required|exists:daops,id',
+        'singkatan' => 'required|string|max:10',
+        'nama' => 'required|string|max:100',
+        'dpl' => 'nullable|numeric',
+        'kode' => 'nullable|string',
+        'aktif' => 'required|boolean',
+        'kotak' => 'nullable|string',
+        'garis_tipis' => 'nullable|string',
+        'garis_tebal' => 'nullable|string',
+        'perhentian' => 'nullable|string',
+        'batas_daop' => 'nullable|string',
+        'track' => 'nullable|string',
+        'ppkt' => 'nullable|string',
+    ]);
 
-        $stasiun->update($data);
+    $validated['updated_by'] = auth()->id();
+    $validated['updated_at'] = now(); // manual karena kamu disable timestamps
 
-        return redirect()->route('stasiun.index')->with('success', 'Data stasiun berhasil diupdate.');
-    }
+    $stasiun->update($validated);
+
+    return redirect()->route('stasiuns.index')->with('success', 'Data berhasil diperbarui.');
+}
+
 
     public function destroy($id)
     {
-        Stasiun::findOrFail($id)->delete();
-        return redirect()->route('stasiun.index')->with('success', 'Data stasiun berhasil dihapus.');
+        $stasiun = Stasiun::findOrFail($id);
+        $stasiun->delete();
+
+        return redirect()->route('stasiuns.index')->with('success', 'Data Stasiun berhasil dihapus');
     }
+
     public function show($id)
 {
-    $stasiun = Stasiun::findOrFail($id);
-    return view('stasiun.show', compact('stasiun'));
+    $stasiun = Stasiun::with('daop')->findOrFail($id);
+
+    return Inertia::render('admin/Stasiun/Show', [
+        'stasiun' => $stasiun
+    ]);
 }
 }

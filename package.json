@@ -1,20 +1,25 @@
 {
-    "private": true,
-    "scripts": {
-        "dev": "npm run development",
-        "development": "mix",
-        "watch": "mix watch",
-        "hot": "mix watch --hot",
-        "prod": "npm run production",
-        "production": "mix --production"
-    },
-    "devDependencies": {
-        "@popperjs/core": "^2.11.6",
-        "axios": "^1.1.2",
-        "bootstrap": "^5.2.3",
-        "laravel-mix": "^6.0.49",
-        "resolve-url-loader": "^5.0.0",
-        "sass": "^1.89.2",
-        "sass-loader": "^12.1.0"
-    }
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@inertiajs/vue3": "^1.0.0",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "autoprefixer": "^10.4.21",
+    "axios": "^1.1.2",
+    "bootstrap": "^5.2.3",
+    "laravel-vite-plugin": "^1.3.0",
+    "postcss": "^8.5.6",
+    "sass": "^1.89.2",
+    "tailwindcss": "^3.4.17",
+    "vue": "^3.4.0"
+  },
+  "dependencies": {
+    "@tailwindcss/forms": "^0.5.10",
+    "lodash": "^4.17.21",
+    "ziggy-js": "^2.5.3"
+  }
 }

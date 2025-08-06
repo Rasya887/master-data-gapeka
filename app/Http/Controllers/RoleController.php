@@ -2,47 +2,57 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
+use Inertia\Inertia;
 
 class RoleController extends Controller
 {
+    
     public function index()
     {
         $roles = Role::all();
-        return view('admin.roles.index', compact('roles'));
+        return Inertia::render('admin/Role/Index', [
+            'roles' => $roles,
+        ]);
     }
 
     public function create()
     {
-        return view('admin.roles.create');
+        return Inertia::render('admin/Role/Create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:roles,name',
+            'name' => 'required|string|max:100',
         ]);
 
-        Role::create(['name' => $request->name]);
+                Role::create([
+        'name' => $request->name,
+        'guard_name' => 'web', // ← ini WAJIB
+    ]);
 
-        return redirect()->route('roles.index')->with('success', 'Role berhasil dibuat.');
+
+        return redirect()->route('roles.index')->with('success', 'Role berhasil ditambahkan.');
     }
 
     public function edit(Role $role)
     {
-        return view('admin.roles.edit', compact('role'));
+        return Inertia::render('admin/Role/Edit', [
+            'role' => $role
+        ]);
     }
 
     public function update(Request $request, Role $role)
     {
         $request->validate([
-            'name' => 'required|unique:roles,name,' . $role->id,
+            'name' => 'required|string|max:100',
         ]);
 
-        $role->update(['name' => $request->name]);
+        $role->update($request->only('name', 'description'));
 
-        return redirect()->route('roles.index')->with('success', 'Role berhasil diupdate.');
+        return redirect()->route('roles.index')->with('success', 'Role berhasil diperbarui.');
     }
 
     public function destroy(Role $role)
