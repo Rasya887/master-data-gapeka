@@ -8,6 +8,7 @@ module.exports = defineConfig({
       input: [
         'resources/css/app.css',
         'resources/js/app.js',
+        'resources/js/Pages/Auth/Login.vue', // ⬅️ Tambahkan ini jika file tidak termasuk di app.js
       ],
       refresh: true,
     }),
