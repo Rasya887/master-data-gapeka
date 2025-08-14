@@ -11,6 +11,7 @@ class Stasiun extends Model
 
     protected $table = 'stasiuns';
 
+    // Kalau memang tidak semua tabel punya auto-updated timestamps
     public $timestamps = false;
 
     protected $fillable = [
@@ -19,7 +20,7 @@ class Stasiun extends Model
         'nama',
         'dpl',
         'kode',
-        'aktif',
+        'aktif', // periksa apakah ini memang kolom "status" yang kamu maksud
         'kotak',
         'garis_tipis',
         'garis_tebal',
@@ -33,16 +34,16 @@ class Stasiun extends Model
         'ppkt',
     ];
 
-    // 🧠 Tambahkan ini:
     protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
     ];
 
+    /**
+     * Relasi ke tabel Daop
+     */
     public function daop()
     {
         return $this->belongsTo(Daop::class, 'id_daop');
     }
 }
-
-

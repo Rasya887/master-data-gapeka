@@ -1,22 +1,47 @@
 <script setup>
 import { Head, useForm } from '@inertiajs/vue3'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
+import { onMounted } from 'vue'
 
 // Gunakan layout tanpa sidebar
 defineOptions({ layout: GuestLayout })
+
+// Site key reCAPTCHA (isi sesuai punyamu)
+const siteKey = 'ISI_SITE_KEY_KAMU'
 
 const form = useForm({
   email: '',
   password: '',
   remember: false,
+  'g-recaptcha-response': '', // tambahkan untuk kirim ke backend
 })
 
 function submit() {
+  // Ambil token reCAPTCHA
+  const token = document.querySelector('#g-recaptcha-response')?.value
+
+  if (!token) {
+    alert('Harap verifikasi reCAPTCHA terlebih dahulu.')
+    return
+  }
+
+  form['g-recaptcha-response'] = token
+
   form.post(route('login'), {
     onFinish: () => form.reset('password'),
   })
 }
+
+// Load script Google reCAPTCHA saat komponen dimount
+onMounted(() => {
+  const script = document.createElement('script')
+  script.src = 'https://www.google.com/recaptcha/api.js'
+  script.async = true
+  script.defer = true
+  document.head.appendChild(script)
+})
 </script>
+
 
 <template>
   <Head title="Login" />
@@ -26,17 +51,16 @@ function submit() {
     <div class="bg-decoration decoration-2"></div>
     <div class="bg-decoration decoration-3"></div>
     <div class="bg-decoration decoration-4"></div>
-    
+
+    <!-- White card wrapper -->
     <div class="login-card">
-      <div class="card-header">
-        <div class="logo-section">
-          <div class="logo-icon">
-            <span class="train-emoji">🚂</span>
-            <div class="logo-glow"></div>
-          </div>
-          <div class="decorative-line"></div>
+      <div class="logo-section">
+        <div class="logo-icon">
+          <span class="train-emoji">🚂</span>
+          <div class="logo-glow"></div>
         </div>
         <h2 class="login-title">Login</h2>
+        <div class="decorative-line"></div>
       </div>
 
       <div class="card-body">
@@ -102,6 +126,11 @@ function submit() {
             </label>
           </div>
 
+          <!-- Google reCAPTCHA -->
+          <div class="form-group text-center">
+            <div class="g-recaptcha" :data-sitekey="siteKey"></div>
+          </div>
+
           <!-- Submit -->
           <div class="submit-section">
             <button
@@ -127,10 +156,9 @@ function submit() {
         </form>
       </div>
     </div>
-
-    <!-- Additional footer info -->
   </div>
 </template>
+
 
 <style scoped>
 :root {
@@ -245,6 +273,10 @@ function submit() {
   transform: translateY(0);
   transition: transform 0.3s ease;
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 40px;
 }
 
 .login-card:hover {
@@ -272,52 +304,14 @@ function submit() {
   50% { transform: translateX(100%); }
 }
 
-.card-header {
-  background: linear-gradient(135deg, 
-    var(--kai-blue) 0%, 
-    var(--kai-dark-blue) 50%,
-    var(--kai-blue) 100%);
-  color: var(--kai-white);
-  text-align: center;
-  padding: 40px 30px;
-  position: relative;
-  overflow: hidden;
-}
-
-.card-header::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  animation: headerShine 4s ease-in-out infinite;
-}
-
-@keyframes headerShine {
-  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-  50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-  100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-}
-
-.card-header::after {
-  content: '';
-  position: absolute;
-  bottom: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-top: 15px solid var(--kai-dark-blue);
-  filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
-}
-
 .logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 25px;
   position: relative;
+  padding: 20px;
 }
 
 .logo-icon {
@@ -325,7 +319,7 @@ function submit() {
   height: 80px;
   background: linear-gradient(135deg, var(--kai-orange) 0%, var(--kai-blue) 100%);
   border-radius: 50%;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 15px;
@@ -360,19 +354,11 @@ function submit() {
   100% { opacity: 0.7; }
 }
 
-.company-name {
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  opacity: 0.9;
-  margin-bottom: 10px;
-}
-
 .decorative-line {
   width: 60px;
   height: 4px;
   background: linear-gradient(90deg, var(--kai-orange) 0%, var(--kai-white) 50%, var(--kai-blue) 100%);
-  margin: 0 auto;
+  margin: 15px auto 0;
   border-radius: 2px;
   position: relative;
   overflow: hidden;
@@ -400,12 +386,15 @@ function submit() {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 2px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  color: var(--kai-blue);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .card-body {
-  padding: 50px 40px 40px;
+  padding: 20px 40px 40px;
   position: relative;
+  background: var(--kai-white);
+  width: 100%;
 }
 
 .form-group {
@@ -675,52 +664,11 @@ function submit() {
   width: 100%;
 }
 
-/* Footer Information */
-.footer-info {
-  margin-top: 30px;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.875rem;
-}
-
-.footer-info p {
-  margin-bottom: 15px;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-.social-links {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-}
-
-.social-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  text-decoration: none;
-  font-size: 1.2rem;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.social-link:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
 /* Focus visible for accessibility */
 .btn-login:focus-visible,
 .form-control:focus-visible,
 .form-check-input:focus-visible,
-.btn-forgot:focus-visible,
-.social-link:focus-visible {
+.btn-forgot:focus-visible {
   outline: 2px solid var(--kai-orange);
   outline-offset: 2px;
 }
@@ -733,14 +681,11 @@ function submit() {
 
   .login-card {
     border-radius: 20px;
+    padding-top: 30px;
   }
   
   .card-body {
-    padding: 40px 25px 30px;
-  }
-  
-  .card-header {
-    padding: 35px 20px;
+    padding: 20px 25px 30px;
   }
 
   .form-control {
@@ -763,17 +708,6 @@ function submit() {
 
   .login-title {
     font-size: 1.5rem;
-  }
-
-  .footer-info {
-    margin-top: 20px;
-    font-size: 0.8rem;
-  }
-
-  .social-link {
-    width: 35px;
-    height: 35px;
-    font-size: 1rem;
   }
 }
 
@@ -821,5 +755,4 @@ function submit() {
 input, button, a {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 </style>

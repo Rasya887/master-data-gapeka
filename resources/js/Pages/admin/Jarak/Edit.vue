@@ -1,6 +1,91 @@
+<template>
+  <Head title="Edit Data Jarak" />
+
+  <div class="app-container">
+    <div class="main-container">
+      <div class="page-header">
+        <h1 class="page-title">Edit Data Jarak</h1>
+        <div class="decorative-line"></div>
+      </div>
+
+      <div class="data-card">
+        <div class="card-header">
+          <div class="header-info">
+            <div class="header-icon">📏</div>
+            <div>
+              <h2 class="header-title">Formulir Edit Jarak</h2>
+              <p class="header-subtitle">Perbarui data jarak antar stasiun</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-container">
+          <form @submit.prevent="submit" class="space-y-6">
+            <div v-for="field in [
+              { label: 'Daop', model: 'id_daop', options: daops },
+              { label: 'Stasiun', model: 'id_stasiun', options: stasiuns },
+              { label: 'Stasiun Sebelah', model: 'id_stasiun_sebelah', options: stasiuns },
+              { label: 'Lintas', model: 'id_lintas', options: id_lintas },
+              { label: 'Tahun Gapeka', model: 'id_tahun_gapeka', options: tahun_gapeka },
+            ]" :key="field.model" class="form-group">
+              <label class="form-label">{{ field.label }}:</label>
+              <select v-model="form[field.model]" class="form-select">
+                <option value="">-- Pilih {{ field.label }} --</option>
+                <option v-for="item in field.options" :key="item.id" :value="item.id">{{ item.nama }}</option>
+              </select>
+              <div v-if="form.errors[field.model]" class="text-red-500 text-sm mt-1">{{ form.errors[field.model] }}</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Jarak (km):</label>
+              <input type="number" step="0.01" v-model="form.jarak" class="form-input" />
+              <div v-if="form.errors.jarak" class="text-red-500 text-sm mt-1">{{ form.errors.jarak }}</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Puncak Kecepatan:</label>
+              <input type="number" v-model="form.puncak_kecepatan" class="form-input" />
+              <div v-if="form.errors.puncak_kecepatan" class="text-red-500 text-sm mt-1">{{ form.errors.puncak_kecepatan }}</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Taspat:</label>
+              <input type="number" v-model="form.taspat" class="form-input" />
+              <div v-if="form.errors.taspat" class="text-red-500 text-sm mt-1">{{ form.errors.taspat }}</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Puncak Kecepatan Barang:</label>
+              <input type="number" v-model="form.puncak_kecepatan_barang" class="form-input" />
+              <div v-if="form.errors.puncak_kecepatan_barang" class="text-red-500 text-sm mt-1">{{ form.errors.puncak_kecepatan_barang }}</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Status:</label>
+              <select v-model="form.status" class="form-select">
+                <option :value="1">Aktif</option>
+                <option :value="0">Non-Aktif</option>
+              </select>
+              <div v-if="form.errors.status" class="text-red-500 text-sm mt-1">{{ form.errors.status }}</div>
+            </div>
+
+            <div class="mt-6 flex space-x-4">
+              <button :disabled="form.processing" class="btn-primary">
+                Simpan Perubahan
+              </button>
+              <Link href="/jarak" class="btn-primary bg-gray-500 hover:bg-gray-600">
+                Kembali
+              </Link>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup>
-import { useForm } from '@inertiajs/vue3'
-import { computed } from 'vue'
+import { useForm, Link, Head } from '@inertiajs/vue3'
 
 const props = defineProps({
   jarak: Object,
@@ -32,74 +117,215 @@ const submit = () => {
 }
 </script>
 
-<template>
-  <div class="p-6 space-y-6">
-    <h1 class="text-2xl font-bold">Edit Data Jarak</h1>
-
-    <form @submit.prevent="submit" class="space-y-4">
-      <div v-for="field in [
-        { label: 'Daop', model: 'id_daop', options: daops },
-        { label: 'Stasiun', model: 'id_stasiun', options: stasiuns },
-        { label: 'Stasiun Sebelah', model: 'id_stasiun_sebelah', options: stasiuns },
-        { label: 'Lintas', model: 'id_lintas', options: lintas },
-        { label: 'Tahun Gapeka', model: 'id_tahun_gapeka', options: tahun_gapeka },
-      ]" :key="field.model">
-        <label>{{ field.label }}:</label>
-        <select v-model="form[field.model]" class="form-select">
-          <option value="">-- Pilih {{ field.label }} --</option>
-          <option v-for="item in field.options" :key="item.id" :value="item.id">{{ item.nama }}</option>
-        </select>
-        <div v-if="form.errors[field.model]" class="text-red-500 text-sm">{{ form.errors[field.model] }}</div>
-      </div>
-
-      <div>
-        <label>Jarak (km):</label>
-        <input type="number" step="0.01" v-model="form.jarak" class="form-input" />
-        <div v-if="form.errors.jarak" class="text-red-500 text-sm">{{ form.errors.jarak }}</div>
-      </div>
-
-      <div>
-        <label>Puncak Kecepatan:</label>
-        <input type="number" v-model="form.puncak_kecepatan" class="form-input" />
-        <div v-if="form.errors.puncak_kecepatan" class="text-red-500 text-sm">{{ form.errors.puncak_kecepatan }}</div>
-      </div>
-
-      <div>
-        <label>Taspat:</label>
-        <input type="number" v-model="form.taspat" class="form-input" />
-        <div v-if="form.errors.taspat" class="text-red-500 text-sm">{{ form.errors.taspat }}</div>
-      </div>
-
-      <div>
-        <label>Puncak Kecepatan Barang:</label>
-        <input type="number" v-model="form.puncak_kecepatan_barang" class="form-input" />
-        <div v-if="form.errors.puncak_kecepatan_barang" class="text-red-500 text-sm">{{ form.errors.puncak_kecepatan_barang }}</div>
-      </div>
-
-      <div>
-        <label>Status:</label>
-        <select v-model="form.status" class="form-select">
-          <option :value="1">Aktif</option>
-          <option :value="0">Non-Aktif</option>
-        </select>
-        <div v-if="form.errors.status" class="text-red-500 text-sm">{{ form.errors.status }}</div>
-      </div>
-
-      <div class="mt-4">
-        <button :disabled="form.processing" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Simpan Perubahan
-        </button>
-      </div>
-    </form>
-  </div>
-</template>
-
 <style scoped>
-.form-select, .form-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 0.375rem;
-  margin-top: 0.25rem;
+.app-container {
+  background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 50%, #FF6B35 100%);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-</style>
+
+.main-container {
+  padding: 40px 20px;
+  min-height: 100vh;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.page-title {
+  color: #FFFFFF;
+  font-size: 3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.decorative-line {
+  width: 120px;
+  height: 4px;
+  background: linear-gradient(90deg, #FF6B35 0%, #FFFFFF 100%);
+  margin: 20px auto;
+  border-radius: 2px;
+}
+
+.data-card {
+  background: #FFFFFF;
+  border-radius: 25px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.data-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #FF6B35 0%, #1E3A8A 25%, #FF6B35 50%, #1E3A8A 75%, #FF6B35 100%);
+}
+
+.card-header {
+  background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%);
+  color: #FFFFFF;
+  padding: 30px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.header-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #FF6B35 0%, #FFFFFF 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+}
+
+.header-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.header-subtitle {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 0.9rem;
+}
+
+.form-container {
+  padding: 30px 40px;
+  background: linear-gradient(135deg, #F8FAFC 0%, rgba(59, 130, 246, 0.05) 100%);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1E3A8A;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 12px 20px;
+  border: 2px solid #E2E8F0;
+  border-radius: 10px;
+  font-size: 1rem;
+  color: #1E3A8A;
+  background: #FFFFFF;
+  transition: all 0.3s ease;
+  height: 48px;
+  box-sizing: border-box;
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #FF6B35;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+}
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%231E3A8A' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.5em;
+}
+
+.btn-primary {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-size: 0.9rem;
+  min-width: 120px;
+  justify-content: center;
+  background: linear-gradient(135deg, #FF6B35 0%, #FF8A65 100%);
+  color: #FFFFFF;
+  box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+.btn-primary:disabled {
+  background: #E2E8F0;
+  color: #6B7280;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .card-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .form-container {
+    padding: 20px;
+  }
+
+  .form-input,
+  .form-select {
+    font-size: 0.9rem;
+  }
+
+  .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .form-group {
+    gap: 6px;
+  }
+}
+</style>  

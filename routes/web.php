@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\ExportController;
 
 // Auth
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\JarakController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MenuController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -68,3 +70,15 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::resource('users', UserController::class)->except(['show']);
     Route::resource('menus', MenuController::class)->except(['show']);
 });
+
+Route::get('/export', function () {
+    return Inertia::render('Export/Index');
+})->name('export.index');
+
+// Route export action
+Route::get('/export/daop/excel', [ExportController::class, 'exportDaopExcel']);
+Route::get('/export/daop/pdf', [ExportController::class, 'exportDaopPdf']);
+Route::get('/export/stasiun/excel', [ExportController::class, 'exportStasiunExcel']);
+Route::get('/export/stasiun/pdf', [ExportController::class, 'exportStasiunPdf']);
+Route::get('/export/jarak/excel', [ExportController::class, 'exportJarakExcel']);
+Route::get('/export/jarak/pdf', [ExportController::class, 'exportJarakPdf']);

@@ -14,6 +14,8 @@
             <li><Link href="/daops" class="sidebar-link">Data Daop</Link></li>
             <li><Link href="/stasiuns" class="sidebar-link">Data Stasiun</Link></li>
             <li><Link href="/jarak" class="sidebar-link">Data Jarak</Link></li>
+            <li class="menu-divider"></li>
+            <li><Link href="/export" class="sidebar-link">Export Excel/Pdf</Link></li>
           </ul>
         </div>
         <div class="logout-container">
