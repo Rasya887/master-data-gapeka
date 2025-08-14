@@ -8,8 +8,6 @@ export default defineConfig({
       input: [
         'resources/css/app.css',
         'resources/js/app.js',
-        'resources/js/Pages/Auth/Login.vue', // pastikan ini dimasukkan
-        'resources/js/Pages/admin/Daop/index.vue'
       ],
       refresh: true,
     }),
