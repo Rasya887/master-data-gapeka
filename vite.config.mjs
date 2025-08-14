@@ -7,9 +7,11 @@ export default defineConfig({
     laravel({
       input: [
         'resources/css/app.css',
-        'resources/js/app.js' // ganti dengan 'app.njs' jika file kamu memang .njs
+        'resources/js/app.js',
+        'resources/js/Pages/Auth/Login.vue', // pastikan ini dimasukkan
+        'resources/js/Pages/admin/Daop/index.vue'
       ],
-      refresh: true, // otomatis refresh Blade saat JS/CSS berubah
+      refresh: true,
     }),
     vue(),
   ],
