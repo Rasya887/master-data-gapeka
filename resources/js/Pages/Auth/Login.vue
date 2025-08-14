@@ -7,7 +7,7 @@ import { onMounted } from 'vue'
 defineOptions({ layout: GuestLayout })
 
 // Site key reCAPTCHA (isi sesuai punyamu)
-const siteKey = 'ISI_SITE_KEY_KAMU'
+const siteKey = '6LcaepErAAAAAGgXSKy9T6g_85GN9rnzGxvoxfDe'
 
 const form = useForm({
   email: '',
