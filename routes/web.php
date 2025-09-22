@@ -18,6 +18,10 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MenuController;
 
+use App\Models\Stasiun;
+use App\Models\Jarak;
+use App\Models\Daop;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -41,8 +45,32 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Dashboard
-    Route::get('/dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
+    // Dashboard dengan data
+    Route::get('/dashboard', function () {
+        // Ambil jumlah data
+        $totalStasiun = Stasiun::count();
+        $totalJarak = Jarak::count();
+
+        // Contoh grouping data jarak per daop
+        $jarakPerDaop = Jarak::selectRaw('id_daop, COUNT(*) as total')
+            ->groupBy('id_daop')
+            ->with('daop:id,nama') // relasi daop kalau ada
+            ->get();
+
+        // Contoh grouping stasiun per daop
+        $stasiunPerDaop = Stasiun::selectRaw('id_daop, COUNT(*) as total')
+            ->groupBy('id_daop')
+            ->with('daop:id,nama')
+            ->get();
+
+        return Inertia::render('Dashboard', [
+            'totalStasiun' => $totalStasiun,
+            'totalJarak'   => $totalJarak,
+            'jarakPerDaop' => $jarakPerDaop,
+            'stasiunPerDaop' => $stasiunPerDaop,
+        ]);
+    })->name('dashboard');
+
 
     // View-only for all roles
     Route::get('/daops', [DaopController::class, 'index'])->name('daops.index');
