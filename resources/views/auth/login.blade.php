@@ -244,26 +244,6 @@
             <h4>{{ __('Login') }}</h4>
         </div>
         
-        <div class="card-body">
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
-                
-                                {{-- Di bagian atas file --}}
-                {!! NoCaptcha::renderJs() !!}
-
-                {{-- Di dalam form sebelum tombol submit --}}
-                <div class="mb-3">
-                    {!! NoCaptcha::display() !!}
-                    @if ($errors->has('g-recaptcha-response'))
-                        <small class="text-danger">
-                            {{ $errors->first('g-recaptcha-response') }}
-                        </small>
-                    @endif
-                </div>
-
-
-
-                <div class="form-group">
                     <label for="email" class="form-label">{{ __('Email Address') }}</label>
                     <div style="position: relative;">
                         <input id="email" 
